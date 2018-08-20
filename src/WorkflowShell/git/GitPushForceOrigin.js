@@ -20,8 +20,14 @@ class GitPushForceOrigin extends Command {
       return false;
     }
 
+
     const branchCommand = 'git rev-parse --abbrev-ref HEAD';
     const branchName = super.executeWithReturn(branchCommand);
+
+    if (branchName === 'master' || branchName === 'develop') {
+      console.log('You are on master or develop');
+      return false;
+    }
 
     const pushCommand = `git push -f origin ${branchName}`;
     return super.execute(pushCommand);
