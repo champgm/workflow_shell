@@ -21,7 +21,7 @@ setup(
     install_requires=dependencies,
     entry_points={
         'console_scripts': [
-            'workflow-shell = workflow_shell.cli:main',
+            'wshp = workflow_shell.cli:main',
         ],
     },
     classifiers=[
