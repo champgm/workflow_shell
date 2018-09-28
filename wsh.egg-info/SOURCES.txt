@@ -2,6 +2,8 @@ README.md
 setup.cfg
 workflow_shell/__init__.py
 workflow_shell/cli.py
+workflow_shell/git/__init__.py
+workflow_shell/git/git-status.py
 wsh.egg-info/PKG-INFO
 wsh.egg-info/SOURCES.txt
 wsh.egg-info/dependency_links.txt
