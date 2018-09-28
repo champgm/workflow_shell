@@ -1,0 +1,11 @@
+README.md
+setup.cfg
+workflow_shell/__init__.py
+workflow_shell/cli.py
+wsh.egg-info/PKG-INFO
+wsh.egg-info/SOURCES.txt
+wsh.egg-info/dependency_links.txt
+wsh.egg-info/entry_points.txt
+wsh.egg-info/not-zip-safe
+wsh.egg-info/requires.txt
+wsh.egg-info/top_level.txt

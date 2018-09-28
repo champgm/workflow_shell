@@ -1,0 +1,3 @@
+[console_scripts]
+wshp = workflow_shell.cli:main
+
