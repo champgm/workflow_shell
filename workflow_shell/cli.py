@@ -3,34 +3,27 @@ import click
 import importlib
 from os import walk
 from glob import glob
-
-
-def print_dir(thing):
-    dir_list = dir(thing)
-    for item_name in dir_list:
-        item = getattr(thing, item_name)
-        click.echo(item_name+': '+str(item))
+from .command import get_class
+from .util import print_dir
+from click import Argument
 
 
 @click.group()
-# @click.option('--as-cowboy', '-cw', is_flag=True, help='Greet as a cowboy.')
 def wshp():
     """Workflow Shell"""
 
 
-# click.echo('wshp dir: ' + str(dir(wshp)))
-# click.echo('here comes the wshp dir')
-# print_dir(wshp)
-
-
 def commandize(module):
-    click.echo('command string: ')
-    click.echo(module.command_string)
     if 'command_string' in dir(module):
-        @wshp.command(name=module.command_string)
+        @wshp.command(name=module.command_string, cls=get_class())
+        # @click.argument('filename')
         def wrapper(*args, **kwargs):
             return module.main(*args, **kwargs)
         wrapper.help = module.command_help
+        if hasattr(module,'command_arguments'):
+          argument = Argument(module.command_arguments)
+          wrapper.params.append(argument)
+        # print_dir(wrapper)
         return wrapper
     return None
 
@@ -69,4 +62,3 @@ for subfolder_name in subfolder_names:
     for command_name in command_names:
         command = importlib.import_module(module_name+'.'+command_name)
         commandize(command)
-        click.echo('command_names: '+str(module))
