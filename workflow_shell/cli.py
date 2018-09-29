@@ -17,20 +17,11 @@ def wshp(as_cowboy):
     click.echo(gs)
     click.echo(dir(gs))
 
-    # gs.main()
-    # commandized = commandize(gs.main)
-    # setattr(gs, 'main', commandized)
-
-
-def commandize(function):
-      click.echo(function.__name__)
-
-    @wshp.command(name='gs')
+def commandize(module):
+    @wshp.command(name=module.get_command_name())
     def wrapper(*args, **kwargs):
-        print(function)
-        return function(*args, **kwargs)
-    click.echo(wrapper)
+        return module.main(*args, **kwargs)
     return wrapper
 
-commandize(gs.main)
 
+commandize(gs)
