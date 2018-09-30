@@ -11,8 +11,12 @@ def get_result(command: list):
 
 def run(command: list):
     """Runs a command and prints output to console"""
-    result = sub_run(command, check=True)
-    return result
+    try:
+        result = sub_run(command, check=True)
+        return result
+    except Exception as exception:
+        click.echo(str(exception))
+        sys.exit(1)
 
 
 def print_dir(thing):
