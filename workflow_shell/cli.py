@@ -9,7 +9,7 @@ from click import Argument
 
 
 @click.group()
-def wshp():
+def wsh():
     """Workflow Shell"""
 
 
@@ -18,7 +18,7 @@ all_commands = {}
 
 def commandize(module):
     if 'command_string' in dir(module):
-        @wshp.command(name=module.command_string)
+        @wsh.command(name=module.command_string)
         @click.pass_context
         # @click.argument('filename')
         def wrapper(*args, **kwargs):
