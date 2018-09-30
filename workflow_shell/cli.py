@@ -3,24 +3,23 @@ import click
 import importlib
 from os import walk
 from glob import glob
-from .command import get_class
 from .util import print_dir
 from click import Argument
 
 
 @click.group()
 def wsh():
-    """Workflow Shell"""
+    """Workflow Shell, A set of scripts built into a shell utility to help speed up your workflow."""
 
 
+# A dictionary so commands can retrieve and run other commands
 all_commands = {}
 
 
 def commandize(module):
-    if 'command_string' in dir(module):
+    if hasattr(module, 'command_string'):
         @wsh.command(name=module.command_string)
         @click.pass_context
-        # @click.argument('filename')
         def wrapper(*args, **kwargs):
             return module.main(*args, **kwargs)
         wrapper.help = module.command_help
@@ -35,7 +34,6 @@ def commandize(module):
             else:
                 argument = Argument(module.command_arguments)
                 wrapper.params.append(argument)
-        # print_dir(wrapper)
         all_commands[module.command_string] = wrapper
         return wrapper
     return None
@@ -45,10 +43,10 @@ def commandize(module):
 scriptDirectory = os.path.dirname(os.path.realpath(__file__))
 directory_glob = scriptDirectory+"/*/"
 subfolders = glob(directory_glob)
+blacklist = ['__pycache__']
 
 
 def blacklisted(path):
-    blacklist = ['__pycache__']
     for banned in blacklist:
         if banned in path:
             return True
