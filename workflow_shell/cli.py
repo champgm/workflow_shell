@@ -15,14 +15,22 @@ def wshp():
 
 def commandize(module):
     if 'command_string' in dir(module):
-        @wshp.command(name=module.command_string, cls=get_class())
+        @wshp.command(name=module.command_string)
         # @click.argument('filename')
         def wrapper(*args, **kwargs):
             return module.main(*args, **kwargs)
         wrapper.help = module.command_help
-        if hasattr(module,'command_arguments'):
-          argument = Argument(module.command_arguments)
-          wrapper.params.append(argument)
+        if hasattr(module, 'command_arguments'):
+            if hasattr(module, 'argument_required') and not module.argument_required:
+                argument = Argument(
+                    module.command_arguments,
+                    module.argument_required,
+                    **{'default': module.argument_default}
+                )
+                wrapper.params.append(argument)
+            else:
+                argument = Argument(module.command_arguments)
+                wrapper.params.append(argument)
         # print_dir(wrapper)
         return wrapper
     return None
