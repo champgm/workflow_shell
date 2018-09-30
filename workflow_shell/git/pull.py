@@ -12,10 +12,19 @@ argument_default = 'develop'
 
 
 def main(*args, **kwargs):
-    # click.echo(str(args))
-    # click.echo(str(kwargs))
     context = args[0]
+    original_branch = get_result(['git', 'rev-parse', '--abbrev-ref', 'HEAD'])
+
+    # Commit current changes
     context.invoke(all_commands['gcam'])
+
+    # Fetch the base branch
     base_branch = kwargs.get(command_arguments[0])
     click.echo('base_branch: '+str(base_branch))
-    current_branch = get_result(['git', 'rev-parse', '--abbrev-ref', 'HEAD'])
+    run(['git', 'checkout', base_branch])
+    run(['git', 'fetch', 'origin'])
+    run(['git', 'pull'])
+
+    # Go back to original branch and rebase
+    run(['git', 'checkout', original_branch])
+    run(['git', 'rebase', base_branch])
