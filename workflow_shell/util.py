@@ -1,6 +1,7 @@
 import click
 from subprocess import check_output
 from subprocess import call
+from subprocess import run as sub_run
 
 
 def get_result(command: list):
@@ -10,7 +11,8 @@ def get_result(command: list):
 
 def run(command: list):
     """Runs a command and prints output to console"""
-    return call(command)
+    result = sub_run(command, check=True)
+    return result
 
 
 def print_dir(thing):
