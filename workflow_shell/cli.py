@@ -13,9 +13,13 @@ def wshp():
     """Workflow Shell"""
 
 
+all_commands = {}
+
+
 def commandize(module):
     if 'command_string' in dir(module):
         @wshp.command(name=module.command_string)
+        @click.pass_context
         # @click.argument('filename')
         def wrapper(*args, **kwargs):
             return module.main(*args, **kwargs)
@@ -32,6 +36,7 @@ def commandize(module):
                 argument = Argument(module.command_arguments)
                 wrapper.params.append(argument)
         # print_dir(wrapper)
+        all_commands[module.command_string] = wrapper
         return wrapper
     return None
 
@@ -68,5 +73,5 @@ for subfolder_name in subfolder_names:
     module_name = package + '.' + str(subfolder_name)
     command_names = importlib.import_module(module_name).__all__
     for command_name in command_names:
-        command = importlib.import_module(module_name+'.'+command_name)
-        commandize(command)
+        function = importlib.import_module(module_name+'.'+command_name)
+        command = commandize(function)
