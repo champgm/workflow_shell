@@ -24,16 +24,17 @@ def commandize(module):
             return module.main(*args, **kwargs)
         wrapper.help = module.command_help
         if hasattr(module, 'command_arguments'):
-            if hasattr(module, 'argument_required') and not module.argument_required:
-                argument = Argument(
-                    module.command_arguments,
-                    module.argument_required,
-                    **{'default': module.argument_default}
-                )
-                wrapper.params.append(argument)
-            else:
-                argument = Argument(module.command_arguments)
-                wrapper.params.append(argument)
+            for command_argument in module.command_arguments:
+                if hasattr(module, 'argument_required') and not module.argument_required:
+                    argument = Argument(
+                        [command_argument],
+                        module.argument_required,
+                        **{'default': module.argument_default}
+                    )
+                    wrapper.params.append(argument)
+                else:
+                    argument = Argument([command_argument])
+                    wrapper.params.append(argument)
         all_commands[module.command_string] = wrapper
         return wrapper
     return None
