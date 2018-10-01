@@ -1,5 +1,3 @@
-import subprocess
-import click
 from ..util import run
 
 

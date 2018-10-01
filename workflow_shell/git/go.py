@@ -1,11 +1,11 @@
-import subprocess
-import click
-from ..util import get_result
-from ..util import run
 from ..cli import all_commands
 
 command_string = 'ggo'
-command_help = 'Takes one optional argument, number of commits to rebase. Commits all staged changes, rebases interactively, amends the most recent commit, then force pushes'
+command_help = 'Takes one optional argument, number of commits to rebase. ' +\
+    'Commits all staged changes, ' +\
+    'rebases interactively, ' +\
+    'amends the most recent commit, ' +\
+    'then force pushes'
 command_arguments = ['number_of_commits']
 argument_required = False
 argument_default = 0

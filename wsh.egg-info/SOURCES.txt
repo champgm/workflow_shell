@@ -2,7 +2,6 @@ README.md
 setup.cfg
 workflow_shell/__init__.py
 workflow_shell/cli.py
-workflow_shell/command.py
 workflow_shell/util.py
 workflow_shell/git/__init__.py
 workflow_shell/git/add-dot.py

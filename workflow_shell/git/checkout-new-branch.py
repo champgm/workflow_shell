@@ -1,11 +1,9 @@
-import subprocess
-import click
-from ..util import get_result
 from ..util import run
 
 
 command_string = 'gcb'
-command_help = 'Takes one argument, the name of the branch. Checks out a new branch'
+command_help = 'Takes one argument, the name of the branch. ' +\
+    'Checks out a new branch'
 command_arguments = ['branch_name']
 argument_required = True
 
