@@ -57,9 +57,13 @@ def blacklisted(path):
 subfolder_paths = list(filter(lambda path: not blacklisted(path), subfolders))
 
 
-def last_folder(path):
+def last_folder(path: str):
     split = path.rsplit('/')
-    return split[-2]
+    if len(split) > 1:
+        return split[-2]
+    else:
+        split = path.rsplit('\\')
+        return split[-2]
 
 
 # Strip the full path off of the folder name
