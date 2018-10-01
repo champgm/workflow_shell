@@ -16,7 +16,7 @@ def main(*args, **kwargs):
 
     # Check out and pull changes for the base branch
     base_branch = kwargs.get(command_arguments[0])
-    context.invoke(all_commands['gcam'], base_branch=base_branch)
+    context.invoke(all_commands['gc'], base_branch=base_branch)
 
     # Go back to original branch and rebase
     run(['git', 'checkout', original_branch])

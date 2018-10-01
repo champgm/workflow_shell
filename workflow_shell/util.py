@@ -1,3 +1,4 @@
+import os
 import sys
 import click
 from subprocess import check_output
@@ -33,3 +34,17 @@ def print_dir(thing):
     for item_name in dir_list:
         item = getattr(thing, item_name)
         click.echo(item_name+': '+str(item))
+
+
+def get_containing_folder(path: str):
+    return os.path.dirname(path)
+
+
+def find_package_jsons():
+    click.echo(
+        'Finding all package.json files excluding those inside \'node_modules\' folders')
+    click.echo('This may take a moment...')
+    file_list = get_result(
+        ['find', '.', '-type', 'f', '-name', 'package.json', '!', '-path', '*/node_modules/*'])
+    package_json_paths = file_list.split('\n')
+    return package_json_paths
