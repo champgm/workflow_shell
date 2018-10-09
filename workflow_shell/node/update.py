@@ -21,6 +21,8 @@ def main(*args, **kwargs):
 
     package_json_paths = find_package_jsons()
     for package_json_path in package_json_paths:
+        click.echo('Project ' + str(package_json_paths.index(package_json_path)+1) +
+                   ' of ' + str(len(package_json_paths)))
         if package is not None:
             if package in open(package_json_path).read():
                 folder = get_containing_folder(package_json_path)

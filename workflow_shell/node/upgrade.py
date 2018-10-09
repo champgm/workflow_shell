@@ -22,10 +22,12 @@ def main(*args, **kwargs):
 
     package_json_paths = find_package_jsons()
     for package_json_path in package_json_paths:
+        click.echo('Project ' + str(package_json_paths.index(package_json_path)+1) +
+                   ' of ' + str(len(package_json_paths)))
         package_json = open(package_json_path).read()
         if package in package_json:
             replace_pattern = '"' + package + '": ".*"'
-            new_string = '"' + package + '": "^'+version+'"'
+            new_string = '"' + package + '": "'+version+'"'
             new_package_json = re.sub(
                 replace_pattern, new_string, package_json)
             folder = get_containing_folder(package_json_path)
