@@ -1,9 +1,6 @@
-import os
-import glob
 import click
 import re
 from ..util import run
-from ..util import get_result
 from ..util import find_package_jsons
 from ..util import get_containing_folder
 

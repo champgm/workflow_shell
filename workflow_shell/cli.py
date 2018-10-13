@@ -1,9 +1,7 @@
 import os
 import click
 import importlib
-from os import walk
 from glob import glob
-from .util import print_dir
 from click import Argument
 
 
