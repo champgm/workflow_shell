@@ -15,19 +15,20 @@ all_commands = {}
 
 
 def commandize(module):
-    if hasattr(module, 'command_string'):
+    if hasattr(module, "command_string"):
+
         @wsh.command(name=module.command_string)
         @click.pass_context
         def wrapper(*args, **kwargs):
             return module.main(*args, **kwargs)
+
         wrapper.help = module.command_help
-        if hasattr(module, 'command_arguments'):
+        wrapper.short_help = module.short_help
+        if hasattr(module, "command_arguments"):
             for command_argument in module.command_arguments:
-                if hasattr(module, 'argument_required') and not module.argument_required:
+                if hasattr(module, "argument_required") and not module.argument_required:
                     argument = Argument(
-                        [command_argument],
-                        module.argument_required,
-                        **{'default': module.argument_default}
+                        [command_argument], module.argument_required, **{"default": module.argument_default}
                     )
                     wrapper.params.append(argument)
                 else:
@@ -40,9 +41,9 @@ def commandize(module):
 
 # create a list of all subdirectories
 scriptDirectory = os.path.dirname(os.path.realpath(__file__))
-directory_glob = scriptDirectory+"/*/"
+directory_glob = scriptDirectory + "/*/"
 subfolders = glob(directory_glob)
-blacklist = ['__pycache__']
+blacklist = ["__pycache__"]
 
 
 def blacklisted(path):
@@ -57,11 +58,11 @@ subfolder_paths = list(filter(lambda path: not blacklisted(path), subfolders))
 
 
 def last_folder(path: str):
-    split = path.rsplit('/')
+    split = path.rsplit("/")
     if len(split) > 1:
         return split[-2]
     else:
-        split = path.rsplit('\\')
+        split = path.rsplit("\\")
         return split[-2]
 
 
@@ -69,10 +70,10 @@ def last_folder(path: str):
 subfolder_names = list(map(lambda path: last_folder(path), subfolder_paths))
 
 # Look through each subfolder's __init__.py for commands, and commandize them
-package, module = __name__.rsplit('.', 1)
+package, module = __name__.rsplit(".", 1)
 for subfolder_name in subfolder_names:
-    module_name = package + '.' + str(subfolder_name)
+    module_name = package + "." + str(subfolder_name)
     command_names = importlib.import_module(module_name).__all__
     for command_name in command_names:
-        function = importlib.import_module(module_name+'.'+command_name)
+        function = importlib.import_module(module_name + "." + command_name)
         command = commandize(function)

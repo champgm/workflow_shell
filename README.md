@@ -23,20 +23,25 @@ or
       --help  Show this message and exit.
 
     Commands:
-      ga       Amends the most recent commit to ensure that it has the correct...
-      gad      Stages all files and folders in the current directory
-      gcam     Takes one argument, the message.
-      gcb      Takes one argument, the name of the branch.
-      gfi      Attempts to fix gitignore not working properly
-      ggo      Takes one optional argument, number of commits to rebase.
-      glog     Displays the git log with each commit on one line in nice colors
-      gp       Takes one optional argument, the name of the base branch to pull...
-      gpfo     Force pushes the current branch into a remote branch of the same...
-      gpretty  Displays the git log with each commit taking only one line
-      grb      Takes one argument, the number of commits to rebase.
-      grc      Continues rebasing
-      gs       Displays the current status of the git repository
-      gsu      Sets the target upstream branch
+      ga        Git - amends recent commit author and timestamp
+      gad       Git - adds all files in current directory
+      gc        Git - Checks out a base branch and pulls
+      gcam      Git - commits all changes
+      gcb       Git - checks out a new branch
+      gcp       Git - cherry-picks a SHA
+      gfi       Git - fixes .gitignore
+      ggo       Git - commits all, rebases, amends, force pushes
+      glog      Git - displays reflog with nice colors
+      gp        Git - pulls and rebases with base branch
+      gpfo      Git - force pushes to origin
+      gpretty   Git - displays commit history with nice colors
+      grb       Git - interactive rebase
+      grc       Git - continues a rebase in progress
+      gs        Git - display repository status
+      gsu       Git - sets target upstream branch
+      nrun      NPM - run a command in all sub-projects
+      nupdate   NPM - update dependencies in all sub-projects
+      nupgrade  NPM - update dependencies in all sub-projects
 
 
 

@@ -7,6 +7,7 @@ from ..cli import all_commands
 command_string = "grb"
 command_help = "Takes one argument, the number of commits to rebase. " + "Rebases interactively with the given number."
 command_arguments = ["number_of_commits"]
+short_help = "Git - interactive rebase"
 
 
 def main(*args, **kwargs):
