@@ -10,7 +10,4 @@ short_help = "Git - force pushes to origin"
 
 def main(*args, **kwargs):
     branch_name = get_result(["git", "rev-parse", "--abbrev-ref", "HEAD"])
-    if branch_name != "master" and branch_name != "develop":
-        run(["git", "push", "-f", "origin", branch_name])
-    else:
-        click.echo("Branch is master or develop, will not push")
+    run(["git", "push", "-f", "origin", branch_name])
