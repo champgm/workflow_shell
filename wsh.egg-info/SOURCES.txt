@@ -1,5 +1,6 @@
 README.md
 setup.cfg
+setup.py
 workflow_shell/__init__.py
 workflow_shell/cli.py
 workflow_shell/util.py
@@ -7,10 +8,13 @@ workflow_shell/git/__init__.py
 workflow_shell/git/add-dot.py
 workflow_shell/git/amend.py
 workflow_shell/git/checkout-new-branch.py
+workflow_shell/git/checkout.py
+workflow_shell/git/cherry-pick.py
 workflow_shell/git/commit-all.py
 workflow_shell/git/fix-ignore.py
 workflow_shell/git/force-push.py
 workflow_shell/git/go.py
+workflow_shell/git/graph.py
 workflow_shell/git/log.py
 workflow_shell/git/pretty.py
 workflow_shell/git/pull.py
@@ -18,6 +22,10 @@ workflow_shell/git/rebase-continue.py
 workflow_shell/git/rebase.py
 workflow_shell/git/set-upstream.py
 workflow_shell/git/status.py
+workflow_shell/node/__init__.py
+workflow_shell/node/run.py
+workflow_shell/node/update.py
+workflow_shell/node/upgrade.py
 wsh.egg-info/PKG-INFO
 wsh.egg-info/SOURCES.txt
 wsh.egg-info/dependency_links.txt

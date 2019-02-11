@@ -3,7 +3,7 @@ Workflow Shell
 """
 from setuptools import find_packages, setup
 
-dependencies = ['click']
+dependencies = ['click', 'pyperclip', 'datetime']
 
 setup(
     name='wsh',
