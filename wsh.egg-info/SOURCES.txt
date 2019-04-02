@@ -4,6 +4,9 @@ setup.py
 workflow_shell/__init__.py
 workflow_shell/cli.py
 workflow_shell/util.py
+workflow_shell/clipboard/__init__.py
+workflow_shell/clipboard/parameter_url.py
+workflow_shell/clipboard/timestamp.py
 workflow_shell/git/__init__.py
 workflow_shell/git/add-dot.py
 workflow_shell/git/amend.py
