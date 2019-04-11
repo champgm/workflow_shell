@@ -1,6 +1,4 @@
 import Command from "../models/Command";
-import Logger from "../util/Logger";
-const logger = new Logger("SendText");
 
 export default class SendText extends Command {
 
@@ -24,7 +22,7 @@ export default class SendText extends Command {
 
     let textToSend: string = args._.shift();
     if (!textToSend) {
-      logger.log("You MUST specify the text to send!");
+      console.log("You MUST specify the text to send!");
       this.printHelp();
       return false;
     }

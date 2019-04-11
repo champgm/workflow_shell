@@ -1,7 +1,4 @@
 import Command from "../models/Command";
-import Logger from "../util/Logger";
-
-const logger = new Logger("MavenPomChange");
 
 export default class MavenPomChange extends Command {
 
@@ -25,9 +22,9 @@ export default class MavenPomChange extends Command {
 
     const newVersion = args._.shift();
     if (!newVersion) {
-      logger.log("You MUST specify the new version!");
-      logger.log("");
-      logger.log("Current version is...");
+      console.log("You MUST specify the new version!");
+      console.log("");
+      console.log("Current version is...");
       super.execute("mvn help:evaluate -Dexpression=project.version|grep -Ev '(^\\[|Download\\w+:)'");
       this.printHelp();
       return false;

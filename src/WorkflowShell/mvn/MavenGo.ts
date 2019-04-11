@@ -1,7 +1,5 @@
 import Command from "../models/Command";
 import HelpItem from "../models/HelpItem";
-import Logger from "../util/Logger";
-const logger: Logger = new Logger("MavenGo");
 const quiet = new HelpItem("q", "quiet", "Suppress most output.");
 const noTest = new HelpItem("n", "noTest", "Skip unit and integration tests.");
 const fast = new HelpItem("f", "fast", "Build with multiple threads.");
@@ -35,7 +33,7 @@ export default class MavenGo extends Command {
       return false;
     }
 
-    logger.log(`${JSON.stringify(args)}`);
+    console.log(`${JSON.stringify(args)}`);
 
     let baseCommand = "mvn -U clean install";
     if (site.short in args || site.long in args) {

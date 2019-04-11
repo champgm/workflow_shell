@@ -1,7 +1,4 @@
 import Command from "../models/Command";
-import Logger from "../util/Logger";
-
-const logger: Logger = new Logger("GitCommitAllMessage");
 
 export default class GitCommitAllMessage extends Command {
 
@@ -25,7 +22,7 @@ export default class GitCommitAllMessage extends Command {
 
     const commitsToRebase = args._.shift();
     if (!commitsToRebase) {
-      logger.log("You MUST specify the number of commits to rebase!");
+      console.log("You MUST specify the number of commits to rebase!");
       this.printHelp();
       return false;
     }

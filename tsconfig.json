@@ -1,15 +1,29 @@
 {
-    "compilerOptions": {
-        "outDir": "./lib",
-        "sourceMap": true,
-        "types" : [ "node" ],
-        "typeRoots": ["node_modules/@types"],
-        "target": "es6"
-    },
-    "include": [
-        "src/**/*"
+  "compileOnSave": false,
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "lib": [
+      "es2017",
+      "dom"
     ],
-    "exclude": [
-        "spec/**/*"
-    ]
+    "declaration": true,
+    "sourceMap": true,
+    "outDir": "./tsc-out",
+    "strict": true,
+    "moduleResolution": "node",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+  },
+  "exclude": [
+    "spec",
+    "tsc-out",
+    "node_modules"
+  ]
 }

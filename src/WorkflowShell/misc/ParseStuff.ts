@@ -1,5 +1,4 @@
 import Command from "../models/Command";
-import Logger from "../util/Logger";
 const csv = require("fast-csv");
 const path = require("path");
 const fs = require("fs");
@@ -7,8 +6,6 @@ const fs = require("fs");
 import SnsToEndpointLink from "../models/SnsToEndpointLink";
 import ClientConfiguration from "../models/ClientConfiguration";
 import { ClientConfigurationBuilder } from "../models/ClientConfiguration";
-
-const logger: Logger = new Logger("ParseStuff");
 
 export default class ParseStuff extends Command {
 
@@ -32,21 +29,21 @@ export default class ParseStuff extends Command {
 
     const deliveryConfigurationFile: string = args._.shift();
     if (!deliveryConfigurationFile) {
-      logger.log("You MUST specify the deliveryConfiguration file!");
+      console.log("You MUST specify the deliveryConfiguration file!");
       this.printHelp();
       return false;
     }
 
     const accountConfigurationFile: string = args._.shift();
     if (!accountConfigurationFile) {
-      logger.log("You MUST specify the accountConfiguration file!");
+      console.log("You MUST specify the accountConfiguration file!");
       this.printHelp();
       return false;
     }
 
     const subscriptionsJsonFile: string = args._.shift();
     if (!subscriptionsJsonFile) {
-      logger.log("You MUST specify the subscriptionsJson file!");
+      console.log("You MUST specify the subscriptionsJson file!");
       this.printHelp();
       return false;
     }
@@ -56,11 +53,11 @@ export default class ParseStuff extends Command {
     //   this.parseAccountConfigurations(accountConfigurationFile));
 
     const deliveryConfigurations = await this.parseDeliveryConfigurations(deliveryConfigurationFile);
-    // logger.log(`Delivery Configurations: ${JSON.stringify(deliveryConfigurations)}`);
+    // console.log(`Delivery Configurations: ${JSON.stringify(deliveryConfigurations)}`);
 
 
     const accountConfigurations = await this.parseAccountConfigurations(accountConfigurationFile);
-    // logger.log(`Parsed account configurationgs: ${JSON.stringify(accountConfigurations)}`);
+    // console.log(`Parsed account configurationgs: ${JSON.stringify(accountConfigurations)}`);
 
 
     // const jsonPath = path.resolve(__dirname, subscriptionsJsonFile);
@@ -97,23 +94,23 @@ export default class ParseStuff extends Command {
 
           const links: string[] = [];
           snsToLambdaLinks.forEach((link) => {
-            // logger.log(`LINK: ${JSON.stringify(link)}`);
+            // console.log(`LINK: ${JSON.stringify(link)}`);
             if (link.snsArn === clientConfigurationBuilder.deliveryMethodName) {
               links.push(link.toString());
             }
           });
           clientConfigurationBuilder.setLinks(links);
 
-          // logger.log(`CLIENT LINKS: ${client.links}`);
+          // console.log(`CLIENT LINKS: ${client.links}`);
         } else {
-          logger.log(`Delivery Configuration not found for configuration ID: ${configurationId}`);
+          console.log(`Delivery Configuration not found for configuration ID: ${configurationId}`);
         }
         configuredClients[configurationId] = clientConfigurationBuilder.build();
       }
     }
 
-    logger.log(`Will Collate data.`);
-    // logger.log(`Configured Clients: ${JSON.stringify(configuredClients)}`);
+    console.log(`Will Collate data.`);
+    // console.log(`Configured Clients: ${JSON.stringify(configuredClients)}`);
 
     const stream = fs.createWriteStream("Account -> Lambda Summary.csv");
     // stream.once('Collated.csv', (fd) => {
@@ -143,11 +140,11 @@ export default class ParseStuff extends Command {
         try {
           deliveryConfigurations[data[0]] = JSON.parse(data[1]);
         } catch (error) {
-          logger.log(`Could not parse line: ${JSON.stringify(data)}`);
+          console.log(`Could not parse line: ${JSON.stringify(data)}`);
         }
       };
       const doneParsing = () => {
-        logger.log("done parsing delivery configurations");
+        console.log("done parsing delivery configurations");
         resolve(deliveryConfigurations);
       };
       csv.fromPath(deliveryConfigurationFile)
@@ -164,11 +161,11 @@ export default class ParseStuff extends Command {
         try {
           accountConfigurations[data[1]] = data[0];
         } catch (error) {
-          logger.log(`Could not parse line: ${JSON.stringify(data)}`);
+          console.log(`Could not parse line: ${JSON.stringify(data)}`);
         }
       };
       const doneParsing = () => {
-        logger.log("done parsing account configurations");
+        console.log("done parsing account configurations");
         resolve(accountConfigurations);
       };
       csv.fromPath(accountConfigurationFile)

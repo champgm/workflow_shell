@@ -1,7 +1,5 @@
 import Command from "../models/Command";
-import Logger from "../util/Logger";
 
-const logger = new Logger("MavenTest");
 export default class MavenTest extends Command {
 
   static getString(): string {
@@ -24,7 +22,7 @@ export default class MavenTest extends Command {
 
     const testName = args._.shift();
     if (!testName) {
-      logger.log("You MUST specify the test name!");
+      console.log("You MUST specify the test name!");
       this.printHelp();
       return false;
     }

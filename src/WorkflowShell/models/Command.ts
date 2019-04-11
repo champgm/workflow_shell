@@ -1,9 +1,7 @@
 import * as ChildProcess from "child_process";
 import HelpItem from "./HelpItem";
-import Logger from "../util/Logger";
 
 const help: HelpItem = new HelpItem("h", "help", "Prints this help message.");
-const logger: Logger = new Logger("Command");
 
 export default class Command {
   static getString(): string {
@@ -17,7 +15,7 @@ export default class Command {
   }
 
   async run(args: any) {
-    // logger.log(`ARGS: ${JSON.stringify(args)}`);
+    // console.log(`ARGS: ${JSON.stringify(args)}`);
     if (typeof args !== "undefined" &&
       args !== undefined &&
       (help.short in args || help.long in args)) {
@@ -29,20 +27,20 @@ export default class Command {
   }
 
   printHelp(): void {
-    logger.log(help.toString());
-    logger.log("");
-    logger.log(`Usage: wsh ${this.getUsage()}`);
+    console.log(help.toString());
+    console.log("");
+    console.log(`Usage: wsh ${this.getUsage()}`);
   }
 
   execute(command: string): boolean {
     const execSync = ChildProcess.execSync;
     try {
-      logger.log(`Running: ${command}`);
+      console.log(`Running: ${command}`);
       const commandExecution: Buffer = execSync(command, { stdio: "inherit" });
       return true;
     } catch (error) {
-      logger.log(`ERROR:\n${error}`);
-      logger.log(`${error.stack}`);
+      console.log(`ERROR:\n${error}`);
+      console.log(`${error.stack}`);
       process.exitCode = 1;
       throw error;
     }
@@ -51,13 +49,13 @@ export default class Command {
   executeWithReturn(command: string): string {
     const execSync = ChildProcess.execSync;
     try {
-      logger.log(`Running: ${command}`);
+      console.log(`Running: ${command}`);
       const commandExecution = execSync(command).toString();
-      logger.log(`Result:\n${commandExecution}`);
+      console.log(`Result:\n${commandExecution}`);
       return commandExecution;
     } catch (error) {
-      logger.log(`ERROR:\n${error}`);
-      logger.log(`${error.stack}`);
+      console.log(`ERROR:\n${error}`);
+      console.log(`${error.stack}`);
       process.exitCode = 1;
       throw error;
     }

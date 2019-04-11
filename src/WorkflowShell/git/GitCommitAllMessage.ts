@@ -1,7 +1,4 @@
 import Command from "../models/Command";
-import Logger from "../util/Logger";
-
-const logger = new Logger("GitCommitAllMessage");
 
 export default class GitCommitAllMessage extends Command {
 
@@ -25,7 +22,7 @@ export default class GitCommitAllMessage extends Command {
 
     const commitMessage: string = args._.shift();
     if (!commitMessage) {
-      logger.log("You MUST specify the commit message!");
+      console.log("You MUST specify the commit message!");
       this.printHelp();
       return false;
     }

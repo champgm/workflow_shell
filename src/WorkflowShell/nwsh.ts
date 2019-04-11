@@ -4,10 +4,8 @@ import * as fs from "fs";
 import * as path from "path";
 import * as minimist from "minimist";
 // import Command from "./models/Command";
-import Logger from "./util/Logger";
 
 const argv = minimist(process.argv.slice(2));
-const logger = new Logger("nwsh.ts");
 
 // From applegrain
 // https://gist.github.com/kethinov/6658166
@@ -35,11 +33,11 @@ walkSync(workingDirectory, []).forEach((filePath) => {
     try {
       // Try to require the class
       const ClassObject = require(filePath).default;
-      // logger.log(`Class Object: ${JSON.stringify(ClassObject)}`);
+      // console.log(`Class Object: ${JSON.stringify(ClassObject)}`);
       // for (const thing in ClassObject) {
-      //   logger.log(`Thing: ${thing}`);
+      //   console.log(`Thing: ${thing}`);
       //   for (const thing2 in ClassObject[thing]) {
-      //     logger.log(`Thing2: ${thing2}`);
+      //     console.log(`Thing2: ${thing2}`);
       //   }
       // }
       // If it"s the right one, instantiate it and run it
@@ -52,8 +50,8 @@ walkSync(workingDirectory, []).forEach((filePath) => {
         foundCommands.push(`${ClassObject.getString()}\t${ClassObject.getDescription()}`);
       }
     } catch (error) {
-      logger.log(`Problem occurred while trying to instantiate "${filePath}"`);
-      logger.log(`Error: ${error} `);
+      console.log(`Problem occurred while trying to instantiate "${filePath}"`);
+      console.log(`Error: ${error} `);
       throw error;
     }
   }
@@ -61,8 +59,8 @@ walkSync(workingDirectory, []).forEach((filePath) => {
 
 // No commands matched... print out the available ones.
 if (!foundCommand && typeof foundCommands !== "undefined" && foundCommands.length > 0) {
-  logger.log(`Unknown command specified: ${desiredCommand} `);
+  console.log(`Unknown command specified: ${desiredCommand} `);
   foundCommands.forEach((command) => {
-    logger.log(`${command} `);
+    console.log(`${command} `);
   });
-};
+}

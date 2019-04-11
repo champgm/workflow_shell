@@ -1,5 +1,4 @@
 import Command from "../models/Command";
-import Logger from "../util/Logger";
 import * as csv from "fast-csv";
 import * as path from "path";
 import * as fs from "fs";
@@ -8,7 +7,6 @@ import * as AWS from "aws-sdk";
 import ClientConfiguration from "../models/ClientConfiguration";
 import SnsToEndpointLink from "../models/SnsToEndpointLink";
 import { ClientConfigurationBuilder } from "../models/ClientConfiguration";
-const logger: Logger = new Logger("ScanAndParseStuff");
 
 export default class ScanAndParseStuff extends Command {
 
@@ -33,20 +31,20 @@ export default class ScanAndParseStuff extends Command {
     let deliveryConfigurationTable = args._.shift();
     if (!deliveryConfigurationTable) {
       deliveryConfigurationTable = "DeliveryConfiguration";
-      logger.log(`DeliveryConfiguration table was not specified. Will use default: ${deliveryConfigurationTable}`);
+      console.log(`DeliveryConfiguration table was not specified. Will use default: ${deliveryConfigurationTable}`);
     }
 
     let accountConfigurationTable = args._.shift();
     if (!accountConfigurationTable) {
       accountConfigurationTable = "DeliveryConfigurationAccounts";
-      logger.log(`DeliveryConfigurationAccounts table was not specified. Will use default: ${accountConfigurationTable}`);
+      console.log(`DeliveryConfigurationAccounts table was not specified. Will use default: ${accountConfigurationTable}`);
     }
 
     AWS.config.update({ region: "us-east-1" });
     const docClient = new AWS.DynamoDB.DocumentClient();
 
     const deliveryConfigurationParameters = { TableName: deliveryConfigurationTable };
-    logger.log(`Scanning ${deliveryConfigurationTable}...`);
+    console.log(`Scanning ${deliveryConfigurationTable}...`);
     const deliveryConfigurationsArray = await this.scanTable(deliveryConfigurationParameters, docClient);
 
     const deliveryConfigurations = {};
@@ -55,11 +53,11 @@ export default class ScanAndParseStuff extends Command {
     });
 
     const accountConfigurationParameters = { TableName: accountConfigurationTable };
-    logger.log(`Scanning ${accountConfigurationTable}...`);
+    console.log(`Scanning ${accountConfigurationTable}...`);
     const accountConfigurations = await this.scanTable(accountConfigurationParameters, docClient);
 
     const sns = new AWS.SNS();
-    logger.log(`Retrieving all subscriptions...`);
+    console.log(`Retrieving all subscriptions...`);
     const subscriptions = await this.listSubscriptions(sns);
 
     const snsToLambdaLinks: SnsToEndpointLink[] = [];
@@ -92,13 +90,13 @@ export default class ScanAndParseStuff extends Command {
           });
           clientConfigurationBuilder.setLinks(links);
         } else {
-          logger.log(`Delivery Configuration not found for configuration ID: ${clientConfigurationBuilder.configurationId}`);
+          console.log(`Delivery Configuration not found for configuration ID: ${clientConfigurationBuilder.configurationId}`);
         }
       }
       configuredClients[clientConfigurationBuilder.configurationId] = clientConfigurationBuilder.build();
     });
 
-    logger.log(`Collating data...`);
+    console.log(`Collating data...`);
     const stream = fs.createWriteStream("Account -> Lambda Summary.csv");
     stream.write("Configuration ID, Account ID, Name, Source, Delivery Method Name, Delivery Method ID, SNS -> Lambda links...\n");
     for (const configurationId in configuredClients) {
@@ -116,7 +114,7 @@ export default class ScanAndParseStuff extends Command {
     }
     stream.end();
 
-    logger.log(`Done!`);
+    console.log(`Done!`);
     return true;
   }
 
