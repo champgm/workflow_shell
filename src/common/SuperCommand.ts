@@ -1,25 +1,25 @@
 import inquirer from 'inquirer';
-import { Argument } from './interface/Argument';
+import { Option } from './interface/Option';
 
-export default abstract class SuperCommand {
+export abstract class SuperCommand {
   abstract alias: string;
   abstract description: string;
   input: any;
-  requiredArguments: Argument[];
+  requiredOptions: Option[];
   inquirerQuestions: any[];
   commander: any;
 
-  public async execute(requiredArguments: Argument[] = [], input?: any) {
+  public async execute(requiredOptions: Option[] = [], input?: any) {
     this.commander = require('commander');
     this.inquirerQuestions = [];
-    requiredArguments.unshift(Argument.LIBRARY.FORCE);
-    this.requiredArguments = requiredArguments;
-    this.input = await this.verifyInput(this.commander, this.inquirerQuestions, requiredArguments, input);
+    requiredOptions.unshift(Option.LIBRARY.FORCE);
+    this.requiredOptions = requiredOptions;
+    this.input = await this.verifyInput(this.commander, this.inquirerQuestions, requiredOptions, input);
     await this.configureInput();
   }
 
   public async confirm(message, confirmDefault = true, throwOnFalse = true): Promise<boolean> {
-    if (!this.input[Argument.LIBRARY.FORCE.name]) {
+    if (!this.input[Option.LIBRARY.FORCE.name]) {
       const answers: any = await inquirer.prompt({
         message,
         type: 'confirm',
@@ -35,21 +35,21 @@ export default abstract class SuperCommand {
     return true;
   }
 
-  public async verifyInput(commander: any, inquirerQuestions: any[], requiredArguments: Argument[], injectedInput: any) {
+  public async verifyInput(commander: any, inquirerQuestions: any[], requiredOptions: Option[], injectedInput: any) {
     if (injectedInput) {
-      this.verifyInjectedInput(requiredArguments, injectedInput);
+      this.verifyInjectedInput(requiredOptions, injectedInput);
       return injectedInput;
     }
 
-    await Argument.requireArguments(requiredArguments, commander);
-    const somethingMissing = requiredArguments.find((argument) => {
-      if (!argument.isOptional) {
-        const argumentFound = !!commander[argument.name];
-        if (!argumentFound) {
-          console.log(`Did not find required argument: ${JSON.stringify(argument)}`);
+    await Option.requireOptions(requiredOptions, commander);
+    const somethingMissing = requiredOptions.find((option) => {
+      if (!option.isOptional) {
+        const optionFound = !!commander[option.name];
+        if (!optionFound) {
+          console.log(`Did not find required option: ${JSON.stringify(option)}`);
           console.log(`Will prompt for all values.`);
         }
-        return !argumentFound;
+        return !optionFound;
       }
       return false;
     });
@@ -63,14 +63,14 @@ export default abstract class SuperCommand {
   }
 
   public async configureInput() {
-    for (const argument of this.requiredArguments) {
-      await argument.configure(this.input);
+    for (const option of this.requiredOptions) {
+      await option.configure(this.input);
     }
   }
 
-  public verifyInjectedInput(requiredArguments: Argument[], injectedInput: any) {
-    const injectedInputMissing = requiredArguments.find((argument) => {
-      return !injectedInput[argument.name];
+  public verifyInjectedInput(requiredOptions: Option[], injectedInput: any) {
+    const injectedInputMissing = requiredOptions.find((option) => {
+      return !injectedInput[option.name];
     });
     if (injectedInputMissing) {
       throw new Error(`Required input not found.\n` +

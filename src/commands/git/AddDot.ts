@@ -1,14 +1,14 @@
-import { executeCommand } from '../../common/Cli';
 import { Option } from '../../common/interface/Option';
 import { SuperCommand } from '../../common/SuperCommand';
+import { executeCommand } from '../../common/Cli';
 
 const requiredOptions: Option[] = [];
 
 export class Command extends SuperCommand {
-  description: string = 'Displays the current status of the git repository';
-  alias: string = 'gs';
+  description: string = 'Stages all files and folders in the current directory';
+  alias: string = 'gad';
   public async execute(input?: any) {
     await super.execute(requiredOptions, input);
-    await executeCommand('git', ['status']);
+    await executeCommand('git', ['add', '.']);
   }
 }

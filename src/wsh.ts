@@ -2,7 +2,7 @@
 
 import glob from 'glob';
 
-import SuperCommand from './common/SuperCommand';
+import { SuperCommand } from './common/SuperCommand';
 
 const desiredCommand: string = process.argv[2];
 const commandPaths: string[] = glob.sync(`${__dirname}/commands/**/*.js`);

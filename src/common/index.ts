@@ -1,4 +1,4 @@
-import SuperCommand from './SuperCommand';
+import { SuperCommand } from './SuperCommand';
 import cloneDeep from 'lodash.clonedeep';
 
 export async function sleep(milliseconds?: number) {
