@@ -1,0 +1,13 @@
+#!/usr/bin/env node
+
+const spawn = require('cross-spawn');
+
+// Compile a list of args
+// Find the current path, append the real entrypoint name
+// Drop the first 2 args (these are current file path and... something else, I forget)
+var args = [ __dirname + '../tsc-out/nwsh.js' ].concat(process.argv.slice(2));
+
+// For some reason, it keeps switching the command to be 'node'...
+// Let's un-do that, then run it.
+// process.argv[0] = 'ts-node';
+spawn(process.argv[0], [].concat(args), { stdio: [0, 1, 2] });

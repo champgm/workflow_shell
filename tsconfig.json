@@ -22,8 +22,7 @@
     "strictNullChecks": false,
   },
   "exclude": [
-    "spec",
-    "tsc-out",
-    "node_modules"
+    "spec/**/*.ts",
+    "tsc-out/**/*.ts"
   ]
 }
