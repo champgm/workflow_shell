@@ -3,6 +3,7 @@ import { Argument } from './interface/Argument';
 
 export default abstract class SuperCommand {
   abstract alias: string;
+  abstract description: string;
   input: any;
   requiredArguments: Argument[];
   inquirerQuestions: any[];
