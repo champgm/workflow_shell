@@ -1,15 +1,8 @@
-# IDE
-.idea/
-*.iml
-*.iws
-.vscode
-
-# Mac
-.DS_Store
-
-# Node
-node_modules/
-npm-debug.log
-
-# Typescript
-tsc-out/
+*-debug.log
+*-error.log
+/.nyc_output
+/dist
+/lib
+/tmp
+/yarn.lock
+node_modules
