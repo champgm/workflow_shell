@@ -3,13 +3,15 @@ import { SuperCommand } from '../../common/SuperCommand';
 import { executeCommand } from '../../common/Cli';
 import { Argument } from '../../common/interface/Argument';
 
-const args: Argument[] = [Argument.LIBRARY.BRANCH];
+import JSON from 'flatted';
+
+const argumentss: Argument[] = [Argument.LIBRARY.GIT_BRANCH];
 
 export class Command extends SuperCommand {
   description: string = 'Takes one argument, the name of the branch. Checks out a new branch.';
   alias: string = 'gcb';
   public async execute(input?: any) {
-    await super.execute([], args, input);
+    await super.execute([], argumentss, input);
     console.log(`${JSON.stringify(this.input, null, 2)}`);
     await executeCommand('git', ['checkout', '-b']);
   }

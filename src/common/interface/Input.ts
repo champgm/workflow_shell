@@ -1,6 +1,7 @@
 import { Option } from './Option';
 import { Argument } from './Argument';
 import { CommanderStatic } from 'commander';
+import JSON from 'flatted';
 
 export interface Input {
   defaultName?: string;
@@ -12,7 +13,7 @@ export interface Input {
 
 export async function configureCommander(
   options: Option[],
-  args: Argument[],
+  argumentss: Argument[],
   commander: CommanderStatic,
 ) {
   console.log(`Adding options: ${JSON.stringify(options)}`);
@@ -22,10 +23,15 @@ export async function configureCommander(
       : `-${option.shortName}, --${option.name} <${option.name}>`;
     commander.option(commanderString, option.description);
   }
-  console.log(`Adding arguments: ${JSON.stringify(arguments)}`);
-  if (args.length > 0) {
-    const argsString = args.map(arg => arg.name).join('> <');
-    commander.arguments(`<${argsString}>`);
+  console.log(`Adding arguments: ${JSON.stringify(argumentss)}`);
+  if (argumentss.length > 0) {
+    const argumentsString = argumentss.map(argss => argss.name).join('> <');
+    console.log(`arguments stirng: ${argumentsString}`);
+    console.log(`argv: ${JSON.stringify(process.argv)}`);
+    commander.arguments(`<${argumentsString}>`)
+      .action((...argumentsArray) => {
+        console.log(`got arguments: ${JSON.stringify(argumentsArray)}`);
+      });
   }
   commander.parse(process.argv);
 }

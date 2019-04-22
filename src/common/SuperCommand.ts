@@ -11,12 +11,12 @@ export abstract class SuperCommand {
   inquirerQuestions: any[];
   commander: any;
 
-  public async execute(options: Option[] = [], args: Argument[] = [], input?: any) {
+  public async execute(options: Option[] = [], argumentss: Argument[] = [], input?: any) {
     this.commander = require('commander');
     this.inquirerQuestions = [];
     options.unshift(Option.LIBRARY.FORCE);
     this.requiredOptions = options;
-    this.input = await this.verifyInput(this.commander, this.inquirerQuestions, options, args, input);
+    this.input = await this.verifyInput(this.commander, this.inquirerQuestions, options, argumentss, input);
     await this.configureInput();
   }
 
@@ -37,13 +37,13 @@ export abstract class SuperCommand {
     return true;
   }
 
-  public async verifyInput(commander: any, inquirerQuestions: any[], options: Option[], args: Argument[], injectedInput: any) {
+  public async verifyInput(commander: any, inquirerQuestions: any[], options: Option[], argumentss: Argument[], injectedInput: any) {
     if (injectedInput) {
       this.verifyInjectedInput(options, injectedInput);
       return injectedInput;
     }
 
-    await configureCommander(options, args, commander);
+    await configureCommander(options, argumentss, commander);
     const somethingMissing = options.find((option) => {
       if (!option.isOptional) {
         const optionFound = !!commander[option.name];
