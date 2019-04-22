@@ -16,28 +16,33 @@ export interface Option {
 export namespace Option {
   export enum NAMES {
     FORCE = 'force',
-    GIT_BRANCH = 'branch',
+    BRANCH_NAME = 'branchName',
+    NUMBER = 'number',
   }
 
-  export const LIBRARY = {
-    FORCE: {
-      name: Option.NAMES.FORCE,
-      shortName: 'F',
-      description: 'Skip input confirmation',
-      isFlag: true,
-      isOptional: true,
-      getQuestion: () => undefined,
-      configure: () => undefined,
-    },
-    BRANCH: {
-      name: Option.NAMES.GIT_BRANCH,
-      shortName: 'g',
-      description: 'Git Branch',
-      getQuestion: Question.LIBRARY.BRANCH,
-      configure: () => { },
-    },
+  export const force: Option = {
+    name: Option.NAMES.FORCE,
+    shortName: 'F',
+    description: 'Skip input confirmation',
+    isFlag: true,
+    isOptional: true,
+    getQuestion: () => undefined,
+    configure: () => undefined,
   };
 
- 
+  export const branchName: Option = {
+    name: Option.NAMES.BRANCH_NAME,
+    shortName: 'g',
+    description: 'Git Branch',
+    getQuestion: Question.getBranchName,
+    configure: () => { },
+  };
 
+  export const number: Option = {
+    name: Option.NAMES.NUMBER,
+    shortName: 'n',
+    description: 'Number',
+    getQuestion: Question.getNumber,
+    configure: () => { },
+  };
 }

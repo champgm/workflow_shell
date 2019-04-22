@@ -1,7 +1,10 @@
 import inquirer from 'inquirer';
 import { Option } from './interface/Option';
 import { Argument } from './interface/Argument';
-import { configureCommander } from './interface/Input';
+import { parseWithCommander } from './interface/Input';
+import FLAT from 'flatted';
+import Commander, { Command, CommanderStatic } from 'commander';
+import { inspect } from 'util';
 
 export abstract class SuperCommand {
   abstract alias: string;
@@ -9,19 +12,19 @@ export abstract class SuperCommand {
   input: any;
   requiredOptions: Option[];
   inquirerQuestions: any[];
-  commander: any;
+  commander: CommanderStatic;
 
-  public async execute(options: Option[] = [], args: Argument[] = [], input?: any) {
+  public async execute(options: Option[] = [], argumentss: Argument[] = [], input?: any) {
     this.commander = require('commander');
     this.inquirerQuestions = [];
-    options.unshift(Option.LIBRARY.FORCE);
+    options.unshift(Option.force);
     this.requiredOptions = options;
-    this.input = await this.verifyInput(this.commander, this.inquirerQuestions, options, args, input);
+    this.input = await this.verifyInput(this.commander, this.inquirerQuestions, options, argumentss, input);
     await this.configureInput();
   }
 
   public async confirm(message, confirmDefault = true, throwOnFalse = true): Promise<boolean> {
-    if (!this.input[Option.LIBRARY.FORCE.name]) {
+    if (!this.input[Option.NAMES.FORCE]) {
       const answers: any = await inquirer.prompt({
         message,
         type: 'confirm',
@@ -37,30 +40,33 @@ export abstract class SuperCommand {
     return true;
   }
 
-  public async verifyInput(commander: any, inquirerQuestions: any[], options: Option[], args: Argument[], injectedInput: any) {
+  public async verifyInput(
+    commander: CommanderStatic,
+    inquirerQuestions: any[],
+    options: Option[],
+    argumentss: Argument[],
+    injectedInput: any,
+  ) {
     if (injectedInput) {
       this.verifyInjectedInput(options, injectedInput);
       return injectedInput;
     }
 
-    await configureCommander(options, args, commander);
-    const somethingMissing = options.find((option) => {
-      if (!option.isOptional) {
-        const optionFound = !!commander[option.name];
-        if (!optionFound) {
-          console.log(`Did not find required option: ${JSON.stringify(option)}`);
-          console.log(`Will prompt for all values.`);
-        }
-        return !optionFound;
+    const parsedArguments = await parseWithCommander(options, argumentss, commander);
+    const somethingMissing = argumentss.find((argument) => {
+      const found = !!parsedArguments[argument.name];
+      if (!found) {
+        console.log(`\nDid not find required option: ${JSON.stringify(argument)}`);
+        console.log(`\nWill prompt for all values.`);
       }
-      return false;
+      return !found;
     });
     if (somethingMissing) {
-      console.log(`Something missing: ${JSON.stringify(somethingMissing)}`);
+      console.log(`\nSomething missing: ${JSON.stringify(somethingMissing)}`);
     }
     const input = somethingMissing
       ? await inquirer.prompt(inquirerQuestions)
-      : commander;
+      : parsedArguments;
     return input;
   }
 

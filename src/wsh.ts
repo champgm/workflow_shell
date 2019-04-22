@@ -22,7 +22,7 @@ const commandPromises = commandPaths.map(async (path) => {
         throw error;
       }
     } else {
-      foundCommands[command.alias] = command;
+      return command;
     }
   } catch (error) {
     console.error(`Problem occurred while trying to instantiate Command in file, '${path}'`);
@@ -31,14 +31,10 @@ const commandPromises = commandPaths.map(async (path) => {
   }
 });
 
-try {
-  (async () => {
-    await Promise.all(commandPromises);
-    process.exit();
-  })();
-} catch (error) {
+(async () => {
+  const commands = await Promise.all(commandPromises);
   console.log(`Command not found, available commands:`);
-  for (const commandAlias of Object.keys(foundCommands).sort()) {
-    console.log(`${commandAlias}\t${foundCommands[commandAlias].description}`);
+  for (const command of commands) {
+    console.log(`${command.alias}\t${command.description}`);
   }
-}
+})();

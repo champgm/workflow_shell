@@ -1,6 +1,9 @@
+import _ from 'lodash';
 import { Option } from './Option';
 import { Argument } from './Argument';
 import { CommanderStatic } from 'commander';
+import FLAT from 'flatted';
+import { inspect } from 'util';
 
 export interface Input {
   defaultName?: string;
@@ -10,22 +13,40 @@ export interface Input {
   [key: string]: any;
 }
 
-export async function configureCommander(
+export async function parseWithCommander(
   options: Option[],
-  args: Argument[],
+  argumentss: Argument[],
   commander: CommanderStatic,
 ) {
-  console.log(`Adding options: ${JSON.stringify(options)}`);
   for (const option of options) {
     const commanderString = option.isFlag
       ? `-${option.shortName}, --${option.name}`
       : `-${option.shortName}, --${option.name} <${option.name}>`;
     commander.option(commanderString, option.description);
   }
-  console.log(`Adding arguments: ${JSON.stringify(arguments)}`);
-  if (args.length > 0) {
-    const argsString = args.map(arg => arg.name).join('> <');
-    commander.arguments(`<${argsString}>`);
+
+  // Commander sucks at parsing arguments, I'll do it myself.
+  const argv = _.clone(process.argv);
+  const parsedArguments: { [argumentName: string]: any } = {};
+  if (argumentss.length > 0) {
+    // argv will look like this: [
+    //   "/Users/userName/.nvm/versions/node/v12.13.0/bin/node",
+    //   "/Users/userName/.nvm/versions/node/v12.13.0/bin/wsh",
+    //   "gcam",
+    //   "ok" ]
+    for (let index = 0; index < argumentss.length; index += 1) {
+      const argument = argumentss[index];
+      const argumentIndex = index + 3; // because of node, wsh, and subcommand
+      parsedArguments[argument.name] = argv[argumentIndex] || argument.default;
+      await argument.configure(parsedArguments[argument.name]);
+    }
   }
-  commander.parse(process.argv);
+  try {
+    commander._exit = () => { };
+    commander.parse(process.argv);
+    return parsedArguments;
+  } catch (error) {
+    console.log(`ERROR: ${error}`);
+    return {};
+  }
 }

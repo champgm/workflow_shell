@@ -13,7 +13,7 @@ export async function exponentialBackOff<T>(action: () => T, timesRetried: numbe
     return await action();
   } catch (error) {
     if (error.message.indexOf('Rate exceeded') > -1) {
-      console.log(`${error.message}`);
+      console.log(`Exponential Backoff Error: ${error.message}`);
 
       // https://cloud.google.com/iot/docs/how-tos/exponential-backoff
       const extraSeconds = Math.random();

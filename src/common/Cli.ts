@@ -19,6 +19,7 @@ export async function getCommandOutput(command: string, parameters?: string[], o
 
 export async function executeCommand(command: string, parameters?: string[], injectedOptions?: any): Promise<any> {
   const options = Object.assign({ stdio: 'inherit' }, injectedOptions);
+  console.log(`Running command: ${[command].concat(parameters).join(' ')}`);
   const child = spawn(command, parameters, options);
 
   return new Promise((resolve, reject) => {
