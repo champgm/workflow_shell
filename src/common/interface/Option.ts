@@ -38,18 +38,6 @@ export namespace Option {
     },
   };
 
-  export async function requireOptions(
-    requiredOptions: Option[],
-    commander: CommanderStatic,
-  ) {
-    console.log(`Requiring options: ${JSON.stringify(requiredOptions)}`);
-    for (const option of requiredOptions) {
-      const commanderString = option.isFlag
-        ? `-${option.shortName}, --${option.name}`
-        : `-${option.shortName}, --${option.name} <${option.name}>`;
-      commander.option(commanderString, option.description);
-    }
-    commander.parse(process.argv);
-  }
+ 
 
 }

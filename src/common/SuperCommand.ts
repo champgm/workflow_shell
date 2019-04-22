@@ -1,5 +1,7 @@
 import inquirer from 'inquirer';
 import { Option } from './interface/Option';
+import { Argument } from './interface/Argument';
+import { configureCommander } from './interface/Input';
 
 export abstract class SuperCommand {
   abstract alias: string;
@@ -9,12 +11,12 @@ export abstract class SuperCommand {
   inquirerQuestions: any[];
   commander: any;
 
-  public async execute(requiredOptions: Option[] = [], input?: any) {
+  public async execute(options: Option[] = [], args: Argument[] = [], input?: any) {
     this.commander = require('commander');
     this.inquirerQuestions = [];
-    requiredOptions.unshift(Option.LIBRARY.FORCE);
-    this.requiredOptions = requiredOptions;
-    this.input = await this.verifyInput(this.commander, this.inquirerQuestions, requiredOptions, input);
+    options.unshift(Option.LIBRARY.FORCE);
+    this.requiredOptions = options;
+    this.input = await this.verifyInput(this.commander, this.inquirerQuestions, options, args, input);
     await this.configureInput();
   }
 
@@ -35,14 +37,14 @@ export abstract class SuperCommand {
     return true;
   }
 
-  public async verifyInput(commander: any, inquirerQuestions: any[], requiredOptions: Option[], injectedInput: any) {
+  public async verifyInput(commander: any, inquirerQuestions: any[], options: Option[], args: Argument[], injectedInput: any) {
     if (injectedInput) {
-      this.verifyInjectedInput(requiredOptions, injectedInput);
+      this.verifyInjectedInput(options, injectedInput);
       return injectedInput;
     }
 
-    await Option.requireOptions(requiredOptions, commander);
-    const somethingMissing = requiredOptions.find((option) => {
+    await configureCommander(options, args, commander);
+    const somethingMissing = options.find((option) => {
       if (!option.isOptional) {
         const optionFound = !!commander[option.name];
         if (!optionFound) {
