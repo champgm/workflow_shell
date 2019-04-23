@@ -28,8 +28,71 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
+* [`wsh gcb [BRANCH]`](#wsh-gcb-branch)
+* [`wsh gs`](#wsh-gs)
 * [`wsh hello [FILE]`](#wsh-hello-file)
 * [`wsh help [COMMAND]`](#wsh-help-command)
+
+## `wsh gcb [BRANCH]`
+
+describe the command here
+
+```
+USAGE
+  $ wsh gcb [BRANCH]
+
+EXAMPLE
+  ⇒  wsh gcb wahtever
+
+  Running: git checkout -b wahtever
+  Switched to a new branch 'wahtever'
+```
+
+_See code: [src/commands/gcb.ts](https://github.com/champgm/workflow_shell/blob/v0.0.1/src/commands/gcb.ts)_
+
+## `wsh gs`
+
+Displays the current status of the git repository
+
+```
+USAGE
+  $ wsh gs
+
+EXAMPLE
+  ⇒  wsh gs
+
+       Running: git status
+       On branch OCLIF
+       Your branch is up to date with 'origin/OCLIF'.
+
+       Changes to be committed:
+         (use "git reset HEAD <file>..." to unstage)
+
+         modified:   README.md
+         modified:   bin/run
+         modified:   package-lock.json
+         modified:   package.json
+         new file:   src/commands/gs.ts
+         modified:   src/commands/hello.ts
+         new file:   src/common/Cli.ts
+         modified:   src/index.ts
+         modified:   tsconfig.json
+         modified:   tslint.json
+
+       Changes not staged for commit:
+         (use "git add <file>..." to update what will be committed)
+         (use "git checkout -- <file>..." to discard changes in working directory)
+
+         modified:   src/commands/gs.ts
+
+       Untracked files:
+         (use "git add <file>..." to include in what will be committed)
+
+         src/commands/gcb.ts
+         src/common/Questionable.ts
+```
+
+_See code: [src/commands/gs.ts](https://github.com/champgm/workflow_shell/blob/v0.0.1/src/commands/gs.ts)_
 
 ## `wsh hello [FILE]`
 
