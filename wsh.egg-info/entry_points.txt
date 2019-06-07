@@ -1,3 +1,0 @@
-[console_scripts]
-wsh = workflow_shell.cli:wsh
-
