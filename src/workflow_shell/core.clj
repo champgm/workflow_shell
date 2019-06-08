@@ -1,7 +1,6 @@
 (ns workflow-shell.core
   (:require [clojure.tools.cli :refer [parse-opts]])
   (:require [clojure.tools.namespace.find :refer [find-namespaces-in-jarfile]])
-  ; (:require workflow-shell.commands);;.git.git_status)
   (:gen-class))
 
 (def cli-options
@@ -17,25 +16,40 @@
   (-> (or ns (class *ns*))
       .getProtectionDomain .getCodeSource .getLocation .toURI .getPath))
 
-(def command-namespaces
-  (let [jarfile (java.util.jar.JarFile. (this-jar))]
-    (filter
-     (fn [x] (.contains x "workflow-shell.commands"))
-     (find-namespaces-in-jarfile jarfile))))
+(defn is-command [string]  (clojure.string/includes? string "workflow-shell.commands"))
 
-  ; )
+(defn command-namespaces []
+  (let [jar-file (java.util.jar.JarFile. (this-jar))]
+    (let [jar-namespaces (find-namespaces-in-jarfile jar-file)]
+      ; (println "     jar-file:" jar-file)
+      ; (println "     jar-namespaces:" jar-namespaces)
+      (filter
+       (fn check-if-command [namespace] (is-command namespace))
+       jar-namespaces))))
+
+(defn get-commands [found-namespaces] (apply merge (map
+                                                    (fn map-to-commands [namespace-string]  (ns-publics namespace-string))
+                                                    found-namespaces)))
 
 
 (defn -main [& args]
   (let [{:keys [options arguments errors summary]} (parse-opts args cli-options :in-order true)
-        jarfile (java.util.jar.JarFile. (this-jar))]
-    (println "options:" options)
-    (println arguments)
-    (println (all-ns))
-    (println jarfile)
-    (println (this-jar))
-    (println (find-namespaces-in-jarfile jarfile))
-    (println command-namespaces
-    ; (println (keys (ns-publics 'workflow-shell.core.commands.git.git_status)))
-    ;  (println (keys (ns-publics 'workflow-shell.commands.*)))
-             )))
+        found-namespaces (command-namespaces)]
+    (println "     options:" options)
+    (println "     arguments:" arguments)
+    (println "     all namespaces: " (all-ns))
+    (println "     command namespaces:" found-namespaces)
+    (doseq [namespace-string found-namespaces] (require namespace-string))
+    (let
+     [all-commands (get-commands found-namespaces)
+      all-command-names (keys all-commands)
+      desired-command-name (first arguments)
+      desired-command (var-get ((symbol desired-command-name) all-commands))]
+      (println "     all-command-names: " all-command-names)
+      (println "     type all-commands: " (type all-commands))
+      (println "     all-commands keys: " (keys all-commands))
+      (println "     desired command nmae: " desired-command-name)
+      (println "     desired-command: " desired-command)
+      (println "     type desired-command: " (type desired-command))
+      (println "     desired-command keys: " (keys desired-command))
+      (apply (:execute desired-command) (rest arguments)))))
