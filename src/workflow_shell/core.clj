@@ -49,7 +49,7 @@
 
     (let
      [all-commands (get-commands found-namespaces)
-      ;all-command-names (keys all-commands)
+      ; all-command-names (keys all-commands)
       desired-command-name (first arguments)]
       ; (println "     all-command-names: " all-command-names)
       ; (println "     type all-commands: " (type all-commands))
@@ -58,10 +58,10 @@
 
       ; Abort if no command was given
       (when (nil? desired-command-name) (print-help desired-command-name all-commands))
+      ; Or if command is unknown
+      (when (nil? ((symbol desired-command-name) all-commands)) (print-help desired-command-name all-commands))
 
       (let
        [desired-command (var-get ((symbol desired-command-name) all-commands))]
-        ; Abort if desired command isn't known
-        (when (nil? desired-command) (print-help desired-command-name all-commands))
         (apply (:execute desired-command) (rest arguments)))))
   (System/exit 0))

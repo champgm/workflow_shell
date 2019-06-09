@@ -5,4 +5,7 @@ lein uberjar
 
 cp "$SCRIPTPATH/target/uberjar/workflow-shell-0.1.0-SNAPSHOT-standalone.jar" "$SCRIPTPATH/target/uberjar/wsh"
 
-wsh gs -a 1234
+echo ""
+echo ""
+
+wsh gcam
