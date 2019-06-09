@@ -1,4 +1,4 @@
-(ns workflow-shell.commands.git.git_status
+(ns workflow-shell.commands.git.status
   ; (:require [clojure.tools.cli :refer [parse-opts]])
   (:require [clojure.java.shell :refer [sh]])
   (:gen-class))

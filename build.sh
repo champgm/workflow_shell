@@ -8,4 +8,4 @@ cp "$SCRIPTPATH/target/uberjar/workflow-shell-0.1.0-SNAPSHOT-standalone.jar" "$S
 echo ""
 echo ""
 
-wsh gcam
+wsh gs
