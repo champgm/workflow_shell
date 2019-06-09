@@ -19,18 +19,17 @@
 (defn is-command "Check a namespace to see if it's got the correct structure indicating a command" [string]
   (clojure.string/includes? string "workflow-shell.commands"))
 
-(defn command-namespaces []
+(defn command-namespaces "Filter out non-command namespaces" []
   (let [jar-file (java.util.jar.JarFile. (this-jar))]
     (let [jar-namespaces (find-namespaces-in-jarfile jar-file)]
       (filter (fn check-if-command [namespace] (is-command namespace)) jar-namespaces))))
 
-(defn get-commands
-  [found-namespaces]
+(defn get-commands "Get command objects from namespaces" [found-namespaces]
   (apply merge
          (map (fn map-to-commands [namespace-string] (ns-publics namespace-string))
               found-namespaces)))
 
-(defn print-help "Print all known commands and their descriptions"
+(defn print-help "Print all known commands and their descriptions, then exit"
   [desired-command-name all-commands]
   (when-not (nil? desired-command-name)
     (println "Command" desired-command-name "not found"))
@@ -49,12 +48,7 @@
 
     (let
      [all-commands (get-commands found-namespaces)
-      ; all-command-names (keys all-commands)
       desired-command-name (first arguments)]
-      ; (println "     all-command-names: " all-command-names)
-      ; (println "     type all-commands: " (type all-commands))
-      ; (println "     all-commands keys: " (keys all-commands))
-      ; (println "     desired command nmae: " desired-command-name)
 
       ; Abort if no command was given
       (when (nil? desired-command-name) (print-help desired-command-name all-commands))
