@@ -1,10 +1,12 @@
 (ns workflow-shell.commands.git.git_status
-  (:require [clojure.tools.cli :refer [parse-opts]])
+  ; (:require [clojure.tools.cli :refer [parse-opts]])
+  (:require [clojure.java.shell :refer [sh]])
   (:gen-class))
-
-; (defn gs [& args]
-;   (println "git status called"))
 
 (def gs (hash-map
          :description "Runs 'git status'"
-         :execute (fn [& args] (println "git status called"))))
+         :execute (fn [& args]
+                    (let [result  (sh "git" "status")]
+                      (if-not (empty? (:out result))
+                        (println (:out result))
+                        (println (:err result)))))))
