@@ -1,5 +1,4 @@
 (ns workflow-shell.commands.git.amend
-  ; (:require [clojure.tools.cli :refer [parse-opts]])
   (:require [clojure.java.shell :refer [sh]])
   (:gen-class))
 
