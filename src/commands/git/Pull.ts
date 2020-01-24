@@ -2,11 +2,8 @@ import { Option } from '../../common/interface/Option';
 import { SuperCommand } from '../../common/SuperCommand';
 import { executeCommand } from '../../common/Cli';
 import { Argument } from '../../common/interface/Argument';
-import { Command as GitCommit } from './CommitAllWithMessage';
 import { Command as GitSyncBase } from './SyncBase';
 import { Command as GitRebase } from './Rebase';
-import { Command as GitAmend } from './Amend';
-import { Command as GitForcePush } from './ForcePush';
 import { Names } from '../../common/interface/Names';
 import { getCurrentBranchName } from '../../common/Git';
 

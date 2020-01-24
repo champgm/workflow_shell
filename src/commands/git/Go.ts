@@ -1,6 +1,5 @@
 import { Option } from '../../common/interface/Option';
 import { SuperCommand } from '../../common/SuperCommand';
-import { executeCommand } from '../../common/Cli';
 import { Argument } from '../../common/interface/Argument';
 import { Command as GitCommit } from './CommitAllWithMessage';
 import { Command as GitRebase } from './Rebase';
@@ -21,8 +20,8 @@ export class Command extends SuperCommand {
   alias: string = 'ggo';
   public async execute(vital?: boolean, input?: any) {
     await super.executeWithInput(argumentss, options, input, vital, async () => {
-      await (new GitCommit()).execute(false);
-      if (this.input[Names.NUMBER]) await (new GitRebase()).execute(true, input);
+      await (new GitCommit()).execute(false, { [Names.COMMIT_MESSAGE]: Argument.COMMIT_MESSAGE.default });
+      if (this.input[Names.NUMBER]) await (new GitRebase()).execute(true, this.input);
       await (new GitAmend()).execute(true);
       await (new GitForcePush()).execute(true);
     });

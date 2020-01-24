@@ -1,5 +1,6 @@
+import _ from 'lodash';
+
 import { SuperCommand } from './SuperCommand';
-import cloneDeep from 'lodash.clonedeep';
 
 export async function sleep(milliseconds?: number) {
   const time = milliseconds
@@ -51,7 +52,7 @@ export function revealAllProperties(object: any): any {
   const enumeratedObject: any = {};
   for (const objectReference of objectReferences) {
     Object.getOwnPropertyNames(objectReference).forEach((property) => {
-      enumeratedObject[property] = cloneDeep(objectReference[property]);
+      enumeratedObject[property] = _.cloneDeep(objectReference[property]);
     });
   }
 

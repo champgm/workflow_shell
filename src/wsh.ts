@@ -3,7 +3,6 @@
 import glob from 'glob';
 
 import { SuperCommand } from './common/SuperCommand';
-import { revealAllProperties } from './common';
 import { inspect } from 'util';
 
 const desiredCommand: string = process.argv[2];

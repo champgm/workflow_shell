@@ -1,10 +1,8 @@
+import _ from 'lodash';
 import inquirer from 'inquirer';
+
 import { Option } from './interface/Option';
 import { Argument } from './interface/Argument';
-import { parseArgumentsAndOptions } from './interface/Input';
-import FLAT from 'flatted';
-import Commander, { Command, CommanderStatic } from 'commander';
-import { inspect } from 'util';
 import { Names } from './interface/Names';
 
 export abstract class SuperCommand {
@@ -12,18 +10,12 @@ export abstract class SuperCommand {
   abstract description: string;
   input: any;
   requiredOptions: Option[];
-  commander: CommanderStatic;
   public abstract execute(vital?: boolean, input?: any): Promise<void>;
 
-  public async prepareExecution(
-    options: Option[] = [],
-    argumentss: Argument[] = [],
-    input?: any,
-  ) {
-    this.commander = require('commander');
+  public async prepareExecution(options: Option[] = [], argumentss: Argument[] = [], input?: any) {
     options.unshift(Option.force);
     this.requiredOptions = options;
-    this.input = await this.verifyInput(this.commander, options, argumentss, input);
+    this.input = await this.verifyInput(options, argumentss, input);
     await this.configureInput();
   }
 
@@ -60,18 +52,13 @@ export abstract class SuperCommand {
     return true;
   }
 
-  public async verifyInput(
-    commander: CommanderStatic,
-    options: Option[],
-    argumentss: Argument[],
-    injectedInput: any,
-  ) {
+  public async verifyInput(options: Option[], argumentss: Argument[], injectedInput: any) {
     if (injectedInput) {
       this.verifyInjectedInput(argumentss, injectedInput);
       return injectedInput;
     }
 
-    const parsedArguments = await parseArgumentsAndOptions(options, argumentss, commander);
+    const parsedArguments = await this.parseArgumentsAndOptions(options, argumentss);
     let somethingMissing = false;
     argumentss.forEach((argument) => {
       const found = !!parsedArguments[argument.name];
@@ -80,12 +67,41 @@ export abstract class SuperCommand {
         somethingMissing = true;
       }
     });
+
     if (somethingMissing) {
       const questions = await Promise.all(argumentss.map(argument => argument.getQuestion(parsedArguments)));
       const answers = await inquirer.prompt(questions) as any;
       return { ...parsedArguments, ...answers };
     }
+
     return parsedArguments;
+  }
+
+  private async parseArgumentsAndOptions(
+    options: Option[],
+    argumentss: Argument[],
+  ) {
+    // Commander sucks at parsing arguments, I'll do it myself.
+    const argv = _.clone(process.argv);
+    const parsedArguments: { [argumentName: string]: any } = {};
+    if (argumentss.length > 0) {
+      // argv will look like this: [
+      //   "/Users/userName/.nvm/versions/node/v12.13.0/bin/node",
+      //   "/Users/userName/.nvm/versions/node/v12.13.0/bin/wsh",
+      //   "gcam",
+      //   "ok" ]
+      for (let index = 0; index < argumentss.length; index += 1) {
+        const argument = argumentss[index];
+        const argumentIndex = index + 3; // because of node, wsh, and subcommand
+        parsedArguments[argument.name] = argv[argumentIndex] || argument.default;
+      }
+    }
+    try {
+      return parsedArguments;
+    } catch (error) {
+      console.log(`ERROR: ${error}`);
+      return {};
+    }
   }
 
   public async configureInput() {

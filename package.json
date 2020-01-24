@@ -10,7 +10,7 @@
     "wsh": "./tsc-out/wsh.js"
   },
   "scripts": {
-    "lint": "tslint src/**/*.ts --fix",
+    "lint": "tslint src/**/*.ts --fix --project tsconfig.json",
     "tslint": "tslint --config tslint.json --exclude 'node_modules/**' '**/*.ts' --fix",
     "clean": "mkdir -p empty_dir && rsync -a --delete empty_dir/ tsc-out/ && rsync -a --delete empty_dir/ coverage/",
     "build": "npm run clean && tsc && chmod +x tsc-out/wsh.js",
@@ -31,7 +31,6 @@
   "dependencies": {
     "aws-sdk": "^2.609.0",
     "clipboardy": "^2.1.0",
-    "commander": "^4.1.0",
     "cross-spawn": "^6.0.5",
     "fast-csv": "^2.5.0",
     "flatted": "^2.0.1",
@@ -49,7 +48,6 @@
   },
   "devDependencies": {
     "@types/clipboardy": "^2.0.1",
-    "@types/commander": "^2.12.2",
     "@types/glob": "^7.1.1",
     "@types/inquirer": "^6.5.0",
     "@types/node": "^13.5.0",
