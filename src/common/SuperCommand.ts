@@ -13,13 +13,34 @@ export abstract class SuperCommand {
   input: any;
   requiredOptions: Option[];
   commander: CommanderStatic;
+  public abstract execute(vital?: boolean, input?: any): Promise<void>;
 
-  public async execute(options: Option[] = [], argumentss: Argument[] = [], input?: any) {
+  public async prepareExecution(
+    options: Option[] = [],
+    argumentss: Argument[] = [],
+    input?: any,
+  ) {
     this.commander = require('commander');
     options.unshift(Option.force);
     this.requiredOptions = options;
     this.input = await this.verifyInput(this.commander, options, argumentss, input);
     await this.configureInput();
+  }
+
+  public async executeWithInput(
+    argumentss: Argument[],
+    options: Option[],
+    input: any,
+    vital: boolean,
+    functionToExecute: (input: any) => Promise<void>,
+  ) {
+    try {
+      await this.prepareExecution(options, argumentss, input);
+      await functionToExecute(input);
+    } catch (error) {
+      console.log(`An error ocurred: ${error}`);
+      if (vital) process.exit(1);
+    }
   }
 
   public async confirm(message, confirmDefault = true, throwOnFalse = true): Promise<boolean> {
@@ -46,7 +67,7 @@ export abstract class SuperCommand {
     injectedInput: any,
   ) {
     if (injectedInput) {
-      this.verifyInjectedInput(options, injectedInput);
+      this.verifyInjectedInput(argumentss, injectedInput);
       return injectedInput;
     }
 
@@ -73,8 +94,8 @@ export abstract class SuperCommand {
     }
   }
 
-  public verifyInjectedInput(requiredOptions: Option[], injectedInput: any) {
-    const injectedInputMissing = requiredOptions.find((option) => {
+  public verifyInjectedInput(argumentss: Argument[], injectedInput: any) {
+    const injectedInputMissing = argumentss.find((option) => {
       return !injectedInput[option.name];
     });
     if (injectedInputMissing) {

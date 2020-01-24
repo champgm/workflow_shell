@@ -25,7 +25,7 @@ export namespace Option {
   };
 
   export const branchName: Option = {
-    name: Names.GIT_BRANCH,
+    name: Names.BRANCH,
     shortName: 'g',
     description: 'Git Branch',
     getQuestion: Question.getBranchName,

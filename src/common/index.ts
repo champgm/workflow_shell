@@ -31,7 +31,7 @@ export async function exponentialBackOff<T>(action: () => T, timesRetried: numbe
 export function execute(command: SuperCommand) {
   try {
     (async () => {
-      await command.execute();
+      await command.prepareExecution();
       process.exit();
     })();
   } catch (error) {

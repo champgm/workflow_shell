@@ -1,8 +1,8 @@
 import inquirer from 'inquirer';
 
+import { Names } from './Names';
 import { Input } from './Input';
 import { Question } from './Question';
-import { Names } from './Names';
 
 export interface Argument {
   name: string;
@@ -13,19 +13,33 @@ export interface Argument {
 }
 
 export namespace Argument {
-  export const GIT_BRANCH: Argument = {
-    name: Names.GIT_BRANCH,
+  export const BRANCH: Argument = {
+    name: Names.BRANCH,
     description: 'Git Branch',
     getQuestion: Question.getBranchName,
     configure: () => { },
   };
 
-  export const GIT_COMMIT_MESSAGE: Argument = {
-    name: Names.GIT_COMMIT_MESSAGE,
+  export const BASE_BRANCH: Argument = {
+    name: Names.BASE_BRANCH,
+    description: 'Base Git Branch',
+    getQuestion: Question.getBaseBranchName,
+    configure: () => { },
+    default: 'develop',
+  };
+
+  export const COMMIT_MESSAGE: Argument = {
+    name: Names.COMMIT_MESSAGE,
     description: 'Git Commit Message',
     getQuestion: Question.getCommitMessage,
     configure: () => { },
     default: 'Test commit, please fixup',
+  };
+  export const COMMIT_SHA: Argument = {
+    name: Names.COMMIT_SHA,
+    description: 'Git Commit SHA',
+    getQuestion: Question.getCommitSha,
+    configure: () => { },
   };
 
   export const NUMBER: Argument = {
@@ -33,5 +47,6 @@ export namespace Argument {
     description: 'A Number',
     getQuestion: Question.getCommitMessage,
     configure: () => { },
+    default: '1',
   };
 }

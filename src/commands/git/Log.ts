@@ -7,11 +7,12 @@ const argumentss: Argument[] = [];
 const options: Option[] = [];
 
 export class Command extends SuperCommand {
-  description: string = 'Amends the most recent commit to ensure that it has the correct author and an updated timestamp';
-  alias: string = 'ga';
+  description: string = 'Displays the git log with each commit on one line in nice colors';
+  alias: string = 'glog';
   public async execute(vital?: boolean, input?: any) {
     await super.executeWithInput(argumentss, options, input, vital, async () => {
-      await executeCommand('git', ['commit', '--amend', '--reset-author', '--no-edit']);
+      const prettyFormat = '--pretty=format:\'%Cred %H %Cgreen %gD %Cblue %s %C(Yellow) %aN\'';
+      await executeCommand('git', ['reflog', prettyFormat]);
     });
   }
 }

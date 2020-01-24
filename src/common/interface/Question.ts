@@ -1,25 +1,41 @@
 import inquirer from 'inquirer';
-import { getCommandOutput } from '../Cli';
-import { Option } from './Option';
 import { Input } from './Input';
 import { Names } from './Names';
+import { getCurrentBranchName } from '../Git';
 
 export namespace Question {
   export async function getBranchName(input: Input): Promise<inquirer.Question> {
     return {
       type: 'input',
-      name: Names.GIT_BRANCH,
+      name: Names.BRANCH,
       message: 'Enter your Git branch name',
-      default: async () => await getCommandOutput('git', ['rev-parse', '--abbrev-ref', 'HEAD']),
+      default: async () => await getCurrentBranchName(),
+    };
+  }
+
+  export async function getBaseBranchName(input: Input): Promise<inquirer.Question> {
+    return {
+      type: 'input',
+      message: 'Enter your Git branch name',
+      name: Names.BASE_BRANCH,
+      default: 'develop',
     };
   }
 
   export async function getCommitMessage(input: Input): Promise<inquirer.Question> {
     return {
       type: 'input',
-      name: Names.GIT_COMMIT_MESSAGE,
+      name: Names.COMMIT_MESSAGE,
       message: 'Enter your commit message',
       default: 'Test commit, please fixup',
+    };
+  }
+
+  export async function getCommitSha(input: Input): Promise<inquirer.Question> {
+    return {
+      type: 'input',
+      name: Names.COMMIT_SHA,
+      message: 'Enter your commit SHA',
     };
   }
 

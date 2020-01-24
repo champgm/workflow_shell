@@ -1,6 +1,8 @@
 export enum Names {
-  GIT_BRANCH = 'branch',
-  GIT_COMMIT_MESSAGE = 'message',
+  BRANCH = 'branch',
+  BASE_BRANCH = 'baseBranch',
+  COMMIT_MESSAGE = 'message',
+  COMMIT_SHA = 'sha',
   NUMBER = 'number',
-  FORCE='force',
+  FORCE = 'force',
 }
