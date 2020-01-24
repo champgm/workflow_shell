@@ -18,7 +18,7 @@ const commandPromises = commandPaths.map(async (path) => {
         process.exit();
       } catch (error) {
         console.error(`An error occurred:`);
-        console.error(JSON.stringify(revealAllProperties(error)));
+        console.error(JSON.stringify(revealAllProperties(error), null, 2));
         throw error;
       }
     } else {

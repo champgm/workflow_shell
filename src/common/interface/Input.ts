@@ -2,8 +2,6 @@ import _ from 'lodash';
 import { Option } from './Option';
 import { Argument } from './Argument';
 import { CommanderStatic } from 'commander';
-import FLAT from 'flatted';
-import { inspect } from 'util';
 
 export interface Input {
   defaultName?: string;
@@ -13,7 +11,7 @@ export interface Input {
   [key: string]: any;
 }
 
-export async function parseWithCommander(
+export async function parseArgumentsAndOptions(
   options: Option[],
   argumentss: Argument[],
   commander: CommanderStatic,
@@ -38,7 +36,6 @@ export async function parseWithCommander(
       const argument = argumentss[index];
       const argumentIndex = index + 3; // because of node, wsh, and subcommand
       parsedArguments[argument.name] = argv[argumentIndex] || argument.default;
-      await argument.configure(parsedArguments[argument.name]);
     }
   }
   try {

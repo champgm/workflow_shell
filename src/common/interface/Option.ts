@@ -1,7 +1,7 @@
-import { CommanderStatic } from 'commander';
 import inquirer from 'inquirer';
 import { Input } from './Input';
 import { Question } from './Question';
+import { Names } from './Names';
 
 export interface Option {
   name: string;
@@ -14,14 +14,8 @@ export interface Option {
 }
 
 export namespace Option {
-  export enum NAMES {
-    FORCE = 'force',
-    BRANCH_NAME = 'branchName',
-    NUMBER = 'number',
-  }
-
   export const force: Option = {
-    name: Option.NAMES.FORCE,
+    name: Names.FORCE,
     shortName: 'F',
     description: 'Skip input confirmation',
     isFlag: true,
@@ -31,7 +25,7 @@ export namespace Option {
   };
 
   export const branchName: Option = {
-    name: Option.NAMES.BRANCH_NAME,
+    name: Names.GIT_BRANCH,
     shortName: 'g',
     description: 'Git Branch',
     getQuestion: Question.getBranchName,
@@ -39,7 +33,7 @@ export namespace Option {
   };
 
   export const number: Option = {
-    name: Option.NAMES.NUMBER,
+    name: Names.NUMBER,
     shortName: 'n',
     description: 'Number',
     getQuestion: Question.getNumber,

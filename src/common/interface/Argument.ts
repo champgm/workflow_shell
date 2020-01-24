@@ -2,31 +2,26 @@ import inquirer from 'inquirer';
 
 import { Input } from './Input';
 import { Question } from './Question';
+import { Names } from './Names';
 
 export interface Argument {
   name: string;
   description: string;
   getQuestion: (input: Input) => Promise<inquirer.Question> | Promise<inquirer.Question[]>;
-  configure: (input: any) => void;
+  configure: (input: any) => void | Promise<void>;
   default?: string;
 }
 
 export namespace Argument {
-  export enum NAMES {
-    GIT_BRANCH = 'branch',
-    GIT_COMMIT_MESSAGE = 'message',
-    NUMBER = 'number',
-  }
-
   export const GIT_BRANCH: Argument = {
-    name: Argument.NAMES.GIT_BRANCH,
+    name: Names.GIT_BRANCH,
     description: 'Git Branch',
     getQuestion: Question.getBranchName,
     configure: () => { },
   };
 
   export const GIT_COMMIT_MESSAGE: Argument = {
-    name: Argument.NAMES.GIT_COMMIT_MESSAGE,
+    name: Names.GIT_COMMIT_MESSAGE,
     description: 'Git Commit Message',
     getQuestion: Question.getCommitMessage,
     configure: () => { },
@@ -34,7 +29,7 @@ export namespace Argument {
   };
 
   export const NUMBER: Argument = {
-    name: Argument.NAMES.NUMBER,
+    name: Names.NUMBER,
     description: 'A Number',
     getQuestion: Question.getCommitMessage,
     configure: () => { },
