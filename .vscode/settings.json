@@ -3,6 +3,7 @@
     "Backoff",
     "Cblue",
     "Cgreen",
+    "Interop",
     "clipboardy",
     "gcam",
     "gitignore",
@@ -12,6 +13,7 @@
     "gsync",
     "oneline",
     "reflog",
-    "subcommand"
+    "subcommand",
+    "unzipper"
   ]
 }

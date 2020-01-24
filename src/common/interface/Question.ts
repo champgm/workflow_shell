@@ -31,6 +31,14 @@ export namespace Question {
     };
   }
 
+  export async function getPassword(input: Input): Promise<inquirer.Question> {
+    return {
+      type: 'input',
+      name: Names.PASSWORD,
+      message: 'Enter the password',
+    };
+  }
+
   export async function getCommitSha(input: Input): Promise<inquirer.Question> {
     return {
       type: 'input',

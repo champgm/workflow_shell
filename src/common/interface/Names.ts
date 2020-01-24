@@ -5,4 +5,5 @@ export enum Names {
   COMMIT_SHA = 'sha',
   NUMBER = 'number',
   FORCE = 'force',
+  PASSWORD = 'password',
 }

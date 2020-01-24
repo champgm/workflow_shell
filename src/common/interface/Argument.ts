@@ -49,4 +49,11 @@ export namespace Argument {
     configure: () => { },
     default: '1',
   };
+
+  export const PASSWORD: Argument = {
+    name: Names.PASSWORD,
+    description: 'The password',
+    getQuestion: Question.getPassword,
+    configure: () => { },
+  };
 }
