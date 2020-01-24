@@ -17,7 +17,7 @@ export class Command extends SuperCommand {
     await super.executeWithInput(argumentss, options, input, vital, async () => {
       const files = this.findByExtension('.', ['.zip', '.rar', '.7z']);
       console.log(`files${JSON.stringify(files, null, 2)}`);
-      files.forEach(async (filePath) => {
+      await Promise.all(files.map(async (filePath) => {
         try {
           const file = path.parse(filePath);
           const targetPath = path.join(file.dir, file.name);
@@ -27,11 +27,11 @@ export class Command extends SuperCommand {
             $progress: true,
             password: this.input[Names.PASSWORD],
           };
-          await ((Zip as any).extractFull(filePath, file.dir, zipOptions));
+          await ((Zip as any).extractFull(filePath, targetPath, zipOptions));
         } catch (error) {
           console.log(`An error ocurred while extracting '${filePath}': ${error}`);
         }
-      });
+      }));
     });
   }
 
