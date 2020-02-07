@@ -4,7 +4,7 @@ import { executeCommand } from '../../common/Cli';
 import { Argument } from '../../common/interface/Argument';
 import { Names } from '../../common/interface/Names';
 
-const argumentss: Argument[] = [];
+const argumentss: Argument[] = [Argument.BRANCH];
 const options: Option[] = [];
 
 export class Command extends SuperCommand {
