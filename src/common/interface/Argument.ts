@@ -25,7 +25,7 @@ export namespace Argument {
     description: 'Base Git Branch',
     getQuestion: Question.getBaseBranchName,
     configure: () => { },
-    default: 'develop',
+    default: 'master',
   };
 
   export const COMMIT_MESSAGE: Argument = {

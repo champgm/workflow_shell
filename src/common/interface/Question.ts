@@ -18,7 +18,7 @@ export namespace Question {
       type: 'input',
       message: 'Enter your Git branch name',
       name: Names.BASE_BRANCH,
-      default: 'develop',
+      default: 'master',
     };
   }
 
