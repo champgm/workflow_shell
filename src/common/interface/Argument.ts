@@ -1,8 +1,10 @@
 import inquirer from 'inquirer';
+import AWS from 'aws-sdk';
 
 import { Names } from './Names';
 import { Input } from './Input';
 import { Question } from './Question';
+import { configureAwsProfile } from '../AWS';
 
 export interface Argument {
   name: string;

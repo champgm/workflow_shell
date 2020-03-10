@@ -6,4 +6,6 @@ export enum Names {
   NUMBER = 'number',
   FORCE = 'force',
   PASSWORD = 'password',
+  REGION = 'region',
+  PROFILE = 'profile',
 }

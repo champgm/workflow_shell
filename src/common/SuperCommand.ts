@@ -16,7 +16,6 @@ export abstract class SuperCommand {
     options.unshift(Option.force);
     this.requiredOptions = options;
     this.input = await this.verifyInput(options, argumentss, input);
-    await this.configureInput();
   }
 
   public async executeWithInput(
@@ -58,26 +57,34 @@ export abstract class SuperCommand {
       return injectedInput;
     }
 
-    const parsedArguments = await this.parseArgumentsAndOptions(options, argumentss);
-    let somethingMissing = false;
+    const parsedArguments = await this.parseArguments(options, argumentss);
     argumentss.forEach((argument) => {
       const found = !!parsedArguments[argument.name];
       if (!found) {
         console.log(`Did not find argument: ${argument.name}`);
-        somethingMissing = true;
+        throw new Error(`Did not find argument: ${argument.name}`);
       }
     });
 
-    if (somethingMissing) {
-      const questions = await Promise.all(argumentss.map(argument => argument.getQuestion(parsedArguments)));
-      const answers = await inquirer.prompt(questions) as any;
+    // Prompt for values for any configured options...
+    // Right now this FORCES interactivity, parseArguments will probably need some refactoring in order to parse options...
+    if (options && options.length > 1) {
+      let answers = {};
+      for (const option of options) {
+        const question = await option.getQuestion(answers);
+        if (question) {
+          const answer = await inquirer.prompt([question]) as any;
+          answers = Object.assign(answer, answers);
+        }
+        await option.configure(answers);
+      }
       return { ...parsedArguments, ...answers };
     }
 
     return parsedArguments;
   }
 
-  private async parseArgumentsAndOptions(
+  private async parseArguments(
     options: Option[],
     argumentss: Argument[],
   ) {
@@ -101,12 +108,6 @@ export abstract class SuperCommand {
     } catch (error) {
       console.log(`ERROR: ${error}`);
       return {};
-    }
-  }
-
-  public async configureInput() {
-    for (const option of this.requiredOptions) {
-      await option.configure(this.input);
     }
   }
 
