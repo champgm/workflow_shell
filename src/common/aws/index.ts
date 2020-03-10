@@ -62,7 +62,7 @@ export async function configureAwsProfile(profileName) {
 
 export async function getAllStackSummaries() {
   const cloudFormation = new AWS.CloudFormation();
-  const StackStatusFilter = [
+  const stackStatusFilter = [
     'CREATE_IN_PROGRESS', 'CREATE_FAILED', 'CREATE_COMPLETE',
     'ROLLBACK_IN_PROGRESS', 'ROLLBACK_FAILED', 'ROLLBACK_COMPLETE',
     'DELETE_IN_PROGRESS', 'DELETE_FAILED', /*"DELETE_COMPLETE", */
@@ -71,12 +71,12 @@ export async function getAllStackSummaries() {
     'UPDATE_ROLLBACK_COMPLETE_CLEANUP_IN_PROGRESS', 'UPDATE_ROLLBACK_COMPLETE',
     'REVIEW_IN_PROGRESS',
   ];
-  let output = await cloudFormation.listStacks({ StackStatusFilter }).promise();
+  let output = await cloudFormation.listStacks({ StackStatusFilter: stackStatusFilter }).promise();
   let allStackSummaries = output.StackSummaries;
   while (output.NextToken) {
     output = await cloudFormation.listStacks({
       NextToken: output.NextToken,
-      StackStatusFilter,
+      StackStatusFilter: stackStatusFilter,
     }).promise();
     allStackSummaries = allStackSummaries.concat(output.StackSummaries);
   }
@@ -143,11 +143,11 @@ export async function createStringParameter(
   }
 }
 
-export async function getParameter(ssm: AWS.SSM, Name: string) {
+export async function getParameter(ssm: AWS.SSM, name: string) {
   try {
-    return (await ssm.getParameter({ Name }).promise()).Parameter.Value;
+    return (await ssm.getParameter({ Name: name }).promise()).Parameter.Value;
   } catch (error) {
-    console.error(`Could not retrieve parameter with name: ${Name}`);
+    console.error(`Could not retrieve parameter with name: ${name}`);
     throw error;
   }
 }

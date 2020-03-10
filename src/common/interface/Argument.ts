@@ -4,7 +4,7 @@ import AWS from 'aws-sdk';
 import { Names } from './Names';
 import { Input } from './Input';
 import { Question } from './Question';
-import { configureAwsProfile } from '../AWS';
+import { configureAwsProfile } from '../aws';
 
 export interface Argument {
   name: string;

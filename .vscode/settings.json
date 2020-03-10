@@ -5,6 +5,7 @@
     "Cgreen",
     "Interop",
     "clipboardy",
+    "configservice",
     "gcam",
     "gitignore",
     "glog",
@@ -14,6 +15,7 @@
     "oneline",
     "reflog",
     "subcommand",
+    "uigp",
     "unzipper"
   ]
 }

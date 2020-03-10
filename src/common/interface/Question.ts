@@ -2,7 +2,7 @@ import inquirer from 'inquirer';
 import { Input } from './Input';
 import { Names } from './Names';
 import { getCurrentBranchName } from '../Git';
-import { getAwsCredentials } from '../AWS';
+import { getAwsCredentials, getAllStackSummaries } from '../aws';
 import AWS from 'aws-sdk';
 
 export namespace Question {
@@ -59,7 +59,6 @@ export namespace Question {
   }
 
   export async function getProfile(input: Input): Promise<inquirer.Question> {
-    console.log(`get profile question`);
     const credentials = getAwsCredentials();
     return {
       type: 'list',
@@ -71,21 +70,27 @@ export namespace Question {
   }
 
   export async function getRegion(input: Input): Promise<inquirer.Question> {
-    console.log(`getting region question...`);
     const s3 = new AWS.S3();
     const ec2 = new AWS.EC2({ region: s3.config.region });
     const regions = await ec2.describeRegions().promise();
-    console.log(`regions${JSON.stringify(regions, null, 2)}`);
     const regionNames = regions.Regions.map(region => region.RegionName);
-    console.log(`regionNames${JSON.stringify(regionNames, null, 2)}`);
-    const regionQuestion = {
+    return {
       type: 'list',
-      choices: () =>  regionNames,
+      choices: () => regionNames,
       name: Names.REGION,
       message: 'Which AWS region do you want to use?',
       default: s3.config.region,
-    };
-    console.log(`regionQuestion${JSON.stringify(regionQuestion, null, 2)}`);
-    return regionQuestion;
+    } as any;
+  }
+
+  export async function getStack(input: Input): Promise<inquirer.Question> {
+    const stackSummaries = await getAllStackSummaries();
+    const stackNames = stackSummaries.map(stack => stack.StackName);
+    return {
+      choices: stackNames,
+      message: 'Select AWS stack',
+      name: Names.STACK,
+      type: 'list',
+    } as any;
   }
 }

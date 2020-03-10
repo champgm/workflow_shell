@@ -3,7 +3,7 @@ import AWS from 'aws-sdk';
 import { Argument } from '../../common/interface/Argument';
 import { Option } from '../../common/interface/Option';
 import { Names } from '../../common/interface/Names';
-import { AwsCommand } from '../../common/AwsCommand';
+import { AwsCommand } from '../../common/aws/AwsCommand';
 import { exponentialBackOff } from '../../common';
 
 const argumentss: Argument[] = [];

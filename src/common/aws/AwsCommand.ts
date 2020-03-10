@@ -1,6 +1,6 @@
-import { SuperCommand } from './SuperCommand';
-import { Option } from './interface/Option';
-import { Argument } from './interface/Argument';
+import { SuperCommand } from '../SuperCommand';
+import { Option } from '../interface/Option';
+import { Argument } from '../interface/Argument';
 
 export abstract class AwsCommand extends SuperCommand {
   public async prepareExecution(options: Option[] = [], argumentss: Argument[] = [], input?: any) {

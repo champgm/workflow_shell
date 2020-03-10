@@ -3,7 +3,7 @@ import { Input } from './Input';
 import { Question } from './Question';
 import { Names } from './Names';
 import AWS from 'aws-sdk';
-import { configureAwsProfile } from '../AWS';
+import { configureAwsProfile } from '../aws';
 
 export interface Option {
   name: string;
@@ -57,6 +57,16 @@ export namespace Option {
     shortName: 'p',
     description: 'The AWS profile to use',
     getQuestion: Question.getProfile,
+    configure: async (input: any) => {
+      await configureAwsProfile(input[Names.PROFILE]);
+    },
+  };
+
+  export const STACK: Option = {
+    name: Names.STACK,
+    shortName: 's',
+    description: 'The AWS stack to use',
+    getQuestion: Question.getStack,
     configure: async (input: any) => {
       await configureAwsProfile(input[Names.PROFILE]);
     },

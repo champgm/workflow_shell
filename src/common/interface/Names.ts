@@ -8,4 +8,5 @@ export enum Names {
   PASSWORD = 'password',
   REGION = 'region',
   PROFILE = 'profile',
+  STACK = 'stack',
 }
