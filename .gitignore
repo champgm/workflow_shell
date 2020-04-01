@@ -12,3 +12,6 @@ npm-debug.log
 
 # Typescript
 tsc-out/
+
+# Work stuff
+src/commands/work/*

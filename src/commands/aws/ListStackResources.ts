@@ -7,7 +7,7 @@ import { AwsCommand } from '../../common/aws/AwsCommand';
 import { exponentialBackOff } from '../../common';
 
 const argumentss: Argument[] = [];
-const options: Option[] = [];
+const options: Option[] = [Option.STACK];
 
 const headers = [
   // STACK_SUMMARY_PROPERTIES
@@ -39,34 +39,37 @@ export class Command extends AwsCommand {
         `to list stack resources in region, '${this.input[Names.REGION]}'?`);
 
       const cloudFormation = new AWS.CloudFormation();
-      const stackSummaries = (await cloudFormation.listStacks().promise()).StackSummaries;
+      // const stackSummaries = (await cloudFormation.listStacks().promise()).StackSummaries;
       let headersWritten = false;
-      for (const ss of stackSummaries) {
-        await exponentialBackOff(async () => {
-          const stackResourceSummaries = (await cloudFormation.listStackResources({
-            StackName: ss.StackId,
-          }).promise()).StackResourceSummaries;
-          if (stackResourceSummaries.length) {
-            if (!headersWritten) {
-              process.stdout.write(headers.join('\t'));
-              process.stdout.write('\n');
-              headersWritten = true;
-            }
-            stackResourceSummaries.forEach((srs) => {
-              const item = { ...srs, ...ss };
-              headers.forEach((h, j) => {
-                const value = JSON.stringify(item[h]) || '';
-                process.stdout.write(value);
-                if (j !== headers.length - 1) {
-                  process.stdout.write('\t');
-                } else {
-                  process.stdout.write('\n');
-                }
-              });
-            });
+      // for (const ss of stackSummaries) {
+      await exponentialBackOff(async () => {
+        const stackSummary = await cloudFormation.describeStacks({
+          StackName: this.input[Names.STACK],
+        }).promise();
+        const stackResourceSummaries = (await cloudFormation.listStackResources({
+          StackName: this.input[Names.STACK],
+        }).promise()).StackResourceSummaries;
+        if (stackResourceSummaries.length) {
+          if (!headersWritten) {
+            process.stdout.write(headers.join('\t'));
+            process.stdout.write('\n');
+            headersWritten = true;
           }
-        });
-      }
+          stackResourceSummaries.forEach((stackResourceSummary) => {
+            const summaryBlob = { ...stackResourceSummary, ...stackSummary };
+            headers.forEach((header, headerIndex) => {
+              const value = JSON.stringify(summaryBlob[header]) || '';
+              process.stdout.write(value);
+              if (headerIndex !== headers.length - 1) {
+                process.stdout.write('\t');
+              } else {
+                process.stdout.write('\n');
+              }
+            });
+          });
+        }
+      });
+      // }
     });
   }
 }

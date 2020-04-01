@@ -5,7 +5,7 @@ import { Option } from '../../common/interface/Option';
 import { Names } from '../../common/interface/Names';
 import { AwsCommand } from '../../common/aws/AwsCommand';
 import { StackTraversal } from '../../common/aws/StackTraversal';
-import { deleteStacks, deleteNatGateways, deleteNetworkInterfaces, deleteSecurityGroups } from '../../common/aws/Stacks';
+import { deleteStacks, deleteNatGateways, deleteNetworkInterfaces, deleteSecurityGroups, awaitDeletion, deleteElasticContainerRegistries, deleteElasticsearchDomains, deleteS3Bucket } from '../../common/aws/Stacks';
 
 const argumentss: Argument[] = [];
 const options: Option[] = [Option.STACK];
@@ -27,8 +27,16 @@ export class Command extends AwsCommand {
         this.input[Names.REGION],
       );
 
+      // TODO: Add step to delete stuff from s3 bucket
+
       console.log(`Deleting stacks...`);
       await deleteStacks(stackTraversal);
+
+      console.log(`Deleting Elasticsearch domains...`);
+      await deleteElasticsearchDomains(stackTraversal);
+
+      console.log(`Deleting Elastic Container Registries...`);
+      await deleteElasticContainerRegistries(stackTraversal);
 
       console.log(`Deleting NAT gateways...`);
       await deleteNatGateways(stackTraversal);
@@ -38,6 +46,12 @@ export class Command extends AwsCommand {
 
       console.log(`Deleting security groups...`);
       await deleteSecurityGroups(stackTraversal);
+
+      // This doesnt' work yet
+      // console.log(`Deleting s3 buckets...`);
+      // await deleteS3Bucket(stackTraversal);
+
+      // await awaitDeletion(this.input[Names.STACK], new AWS.CloudFormation());
     });
   }
 }

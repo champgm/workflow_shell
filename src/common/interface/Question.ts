@@ -73,7 +73,7 @@ export namespace Question {
     const s3 = new AWS.S3();
     const ec2 = new AWS.EC2({ region: s3.config.region });
     const regions = await ec2.describeRegions().promise();
-    const regionNames = regions.Regions.map(region => region.RegionName);
+    const regionNames = regions.Regions.map(region => region.RegionName).sort();
     return {
       type: 'list',
       choices: () => regionNames,
@@ -85,7 +85,7 @@ export namespace Question {
 
   export async function getStack(input: Input): Promise<inquirer.Question> {
     const stackSummaries = await getAllStackSummaries();
-    const stackNames = stackSummaries.map(stack => stack.StackName);
+    const stackNames = stackSummaries.map(stack => stack.StackName).sort();
     return {
       choices: stackNames,
       message: 'Select AWS stack',

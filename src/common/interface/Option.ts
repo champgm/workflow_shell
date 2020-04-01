@@ -67,8 +67,6 @@ export namespace Option {
     shortName: 's',
     description: 'The AWS stack to use',
     getQuestion: Question.getStack,
-    configure: async (input: any) => {
-      await configureAwsProfile(input[Names.PROFILE]);
-    },
+    configure: async (input: any) => { },
   };
 }

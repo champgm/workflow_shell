@@ -7,6 +7,9 @@ import { ResourceType } from 'aws-sdk/clients/configservice';
 import { InternetGateway, NatGateway, NetworkInterface, SecurityGroup } from 'aws-sdk/clients/ec2';
 import { getAllStackSummaries } from '.';
 import { exponentialBackOff } from '..';
+import { ImageIdentifierList, ImageIdentifier } from 'aws-sdk/clients/ecr';
+import { DomainName, DomainInfoList } from 'aws-sdk/clients/es';
+import { DeleteObjectsRequest, ObjectList, ObjectIdentifier } from 'aws-sdk/clients/s3';
 
 export class StackTraversal {
   stackSummaries: StackSummary[] = [];
@@ -15,11 +18,17 @@ export class StackTraversal {
   internetGateways: InternetGateway[] = [];
   natGateways: NatGateway[] = [];
   vpcGatewayAttachments: StackResourceSummary[] = [];
+  elasticContainerRegistries: { repositoryName: string, imageIds: ImageIdentifier[] }[] = [];
+  s3Buckets: StackResourceSummary[] = [];
+  elasticsearchDomainNames: DomainName[] = [];
 
   constructor(
     public region: string,
     public cloudformation = new AWS.CloudFormation(),
     public ec2 = new AWS.EC2(),
+    public ecr = new AWS.ECR(),
+    public es = new AWS.ES(),
+    public s3 = new AWS.S3(),
   ) { }
 
   static async createTraversal(
@@ -27,8 +36,11 @@ export class StackTraversal {
     region: string,
     cloudformation = new AWS.CloudFormation(),
     ec2 = new AWS.EC2(),
+    ecr = new AWS.ECR(),
+    es = new AWS.ES(),
+    s3 = new AWS.S3(),
   ) {
-    const stackTraversal = new StackTraversal(region, cloudformation, ec2);
+    const stackTraversal = new StackTraversal(region, cloudformation, ec2, ecr, es, s3);
     return stackTraversal.traverseStackName(stack);
   }
 
@@ -58,6 +70,15 @@ export class StackTraversal {
         break;
       case 'AWS::EC2::VPCGatewayAttachment':
         await this.recordVpcGatewayAttachment(summary);
+        break;
+      case 'AWS::ECR::Repository':
+        await this.recordEcrImages(summary);
+        break;
+      case 'AWS::Elasticsearch::Domain':
+        await this.recordElasticsearchDomains(summary);
+        break;
+      case 'AWS::S3::Bucket':
+        await this.recordS3Bucket(summary);
         break;
       default:
         break;
@@ -152,6 +173,46 @@ export class StackTraversal {
   async recordVpcGatewayAttachment(summary: StackResourceSummary) {
     console.log(`Found a VPC gateway attachment: ${summary.PhysicalResourceId}`);
     this.vpcGatewayAttachments.push(summary);
+  }
+
+  async recordEcrImages(summary: StackResourceSummary) {
+    const ecrImageIdentifiers: ImageIdentifierList =
+      await exponentialBackOff(async () => {
+        return (await this.ecr.listImages({
+          repositoryName: summary.PhysicalResourceId,
+          maxResults: 1000,
+        }).promise()).imageIds;
+      });
+    console.log(`Found an Elastic Container Registry: ${summary.PhysicalResourceId}`);
+    this.elasticContainerRegistries.push({
+      repositoryName: summary.PhysicalResourceId,
+      imageIds: ecrImageIdentifiers,
+    });
+  }
+
+  async recordElasticsearchDomains(summary: StackResourceSummary) {
+    const elasticsearchDomainNames: DomainName[] =
+      await exponentialBackOff(async () => {
+        const domainInfoList = (await this.es.listDomainNames().promise()).DomainNames;
+        return domainInfoList.reduce(
+          (aggregatedDomainNames, domainInfo) => {
+            if (domainInfo.DomainName && domainInfo.DomainName === summary.PhysicalResourceId) {
+              return aggregatedDomainNames.concat(domainInfo.DomainName);
+            }
+            return aggregatedDomainNames;
+          },
+          [],
+        );
+      });
+    for (const elasticsearchDomainName of elasticsearchDomainNames) {
+      console.log(`Found an Elasticsearch domain: ${elasticsearchDomainName}`);
+      this.elasticsearchDomainNames.push(elasticsearchDomainName);
+    }
+  }
+
+  async recordS3Bucket(summary: StackResourceSummary) {
+    console.log(`Found an S3 bucket: ${summary.PhysicalResourceId}`);
+    this.s3Buckets.push(summary);
   }
 
   writeFileSync(fileName: string) {
