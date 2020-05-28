@@ -9,8 +9,6 @@ export interface Option {
   name: string;
   shortName: string;
   description: string;
-  isFlag?: boolean;
-  isOptional?: boolean;
   getQuestion: (input: Input) => Promise<inquirer.Question> | Promise<inquirer.Question[]>;
   configure: (input: any) => void;
 }
@@ -20,8 +18,6 @@ export namespace Option {
     name: Names.FORCE,
     shortName: 'F',
     description: 'Skip input confirmation',
-    isFlag: true,
-    isOptional: true,
     getQuestion: () => undefined,
     configure: () => undefined,
   };
