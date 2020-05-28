@@ -58,6 +58,7 @@ export namespace Option {
     description: 'The AWS profile to use',
     getQuestion: Question.getProfile,
     configure: async (input: any) => {
+      console.log(`Configuring AWS profile: ${input[Names.PROFILE]}`);
       await configureAwsProfile(input[Names.PROFILE]);
     },
   };

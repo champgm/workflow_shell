@@ -8,7 +8,7 @@ import { StackTraversal } from '../../common/aws/StackTraversal';
 import { deleteStacks, deleteNatGateways, deleteNetworkInterfaces, deleteSecurityGroups, awaitDeletion, deleteElasticContainerRegistries, deleteElasticsearchDomains, deleteS3Bucket } from '../../common/aws/Stacks';
 
 const argumentss: Argument[] = [];
-const options: Option[] = [Option.STACK];
+const options: Option[] = [Option.PROFILE, Option.REGION, Option.STACK];
 
 export class Command extends AwsCommand {
   description: string = 'Destroys an AWS stack';

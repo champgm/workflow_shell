@@ -65,7 +65,7 @@ export namespace Question {
       choices: Object.keys(credentials),
       name: Names.PROFILE,
       message: 'Which AWS profile do you want to use?',
-      default: 1,
+      default: Object.keys(credentials).find(key=>key.includes('dev-devops')),
     } as any;
   }
 
@@ -79,7 +79,8 @@ export namespace Question {
       choices: () => regionNames,
       name: Names.REGION,
       message: 'Which AWS region do you want to use?',
-      default: s3.config.region,
+      // default: s3.config.region,
+      default: 'us-east-2',
     } as any;
   }
 
