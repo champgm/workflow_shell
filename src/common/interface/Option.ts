@@ -66,4 +66,12 @@ export namespace Option {
     getQuestion: Question.getStack,
     configure: async (input: any) => { },
   };
+
+  export const WAIT: Option = {
+    name: Names.WAIT,
+    shortName: 'W',
+    description: 'Wait for command completion',
+    getQuestion: () => undefined,
+    configure: () => undefined,
+  };
 }

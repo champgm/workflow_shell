@@ -9,4 +9,5 @@ export enum Names {
   REGION = 'region',
   PROFILE = 'profile',
   STACK = 'stack',
+  WAIT = 'wait',
 }

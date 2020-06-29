@@ -8,7 +8,7 @@ import { StackTraversal } from '../../common/aws/StackTraversal';
 import { deleteStacks, deleteNatGateways, deleteNetworkInterfaces, deleteSecurityGroups, awaitDeletion, deleteElasticContainerRegistries, deleteElasticsearchDomains, deleteS3Bucket } from '../../common/aws/Stacks';
 
 const argumentss: Argument[] = [];
-const options: Option[] = [Option.STACK];
+const options: Option[] = [Option.STACK, Option.WAIT];
 
 export class Command extends AwsCommand {
   description: string = 'Destroys an AWS stack';
@@ -51,7 +51,9 @@ export class Command extends AwsCommand {
       // console.log(`Deleting s3 buckets...`);
       // await deleteS3Bucket(stackTraversal);
 
-      // await awaitDeletion(this.input[Names.STACK], new AWS.CloudFormation());
+      if (this.input[Names.WAIT] && this.input[Names.WAIT].toLocaleUpperCase() === 'TRUE') {
+        await awaitDeletion(this.input[Names.STACK], new AWS.CloudFormation());
+      }
     });
   }
 }
