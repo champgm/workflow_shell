@@ -12,7 +12,7 @@ const argumentss: Argument[] = [];
 
 export class Command extends SuperCommand {
   description: string = 'Bumps versions';
-  alias: string = 'bump';
+  alias: string = 'bump-event-bus';
   regex: RegExp = new RegExp(/alpha\.\d\d/g);
   public async execute(vital?: boolean, input?: any) {
     await super.executeWithInput(argumentss, options, input, vital, async () => {
