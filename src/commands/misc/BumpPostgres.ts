@@ -7,10 +7,10 @@ import { Option } from '../../common/interface/Option';
 
 import {
   pathToClay,
-  pathToAmphora,
-  pathToAmphoraAuth,
+  // pathToAmphora,
+  // pathToAmphoraAuth,
   pathToAmphoraStoragePostgres,
-  pathToAmphoraSitemaps,
+  // pathToAmphoraSitemaps,
 } from '../../common/Configuration';
 
 const options: Option[] = [];
@@ -22,7 +22,7 @@ export class Command extends SuperCommand {
   regex: RegExp = new RegExp(/alpha\.m\d/g);
   public async execute(vital?: boolean, input?: any) {
     await super.executeWithInput(argumentss, options, input, vital, async () => {
-      const amphoraJsonPath = `${pathToAmphora}/package.json`;
+      const amphoraJsonPath = `${pathToAmphoraStoragePostgres}/package.json`;
       let amphoraPackageJson = fs.readFileSync(amphoraJsonPath).toString('UTF-8');
       const currentVersion = this.regex.exec(amphoraPackageJson);
 
@@ -31,12 +31,12 @@ export class Command extends SuperCommand {
       const nextVersion = `alpha.m${nextNumber}`
       console.log(`Next Version: ${nextVersion}`);
 
-      for (const path of [pathToAmphoraAuth, pathToAmphoraSitemaps, pathToAmphoraStoragePostgres, pathToAmphora]) {
+      for (const path of [pathToAmphoraStoragePostgres]) {
         await this.bump(path, nextVersion);
       }
       await this.bump(pathToClay, nextVersion);
 
-      for (const path of [pathToAmphoraAuth, pathToAmphoraSitemaps, pathToAmphoraStoragePostgres, pathToAmphora]) {
+      for (const path of [pathToAmphoraStoragePostgres]) {
         await this.publish(path);
       }
     });
