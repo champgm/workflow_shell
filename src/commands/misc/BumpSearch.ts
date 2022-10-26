@@ -16,7 +16,7 @@ const argumentss: Argument[] = [];
 export class Command extends SuperCommand {
   description: string = 'Bumps postgres versions';
   alias: string = 'bump-search';
-  regex: RegExp = new RegExp(/alpha\.m\d/g);
+  regex: RegExp = new RegExp(/alpha\.m\d\d\d/g);
   public async execute(vital?: boolean, input?: any) {
     await super.executeWithInput(argumentss, options, input, vital, async () => {
       const searchJsonPath = `${pathToSearch}/package.json`;

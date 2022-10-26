@@ -7,7 +7,7 @@ import { Option } from '../../common/interface/Option';
 
 import {
   pathToClay,
-  // pathToAmphora,
+  pathToAmphora,
   // pathToAmphoraAuth,
   pathToAmphoraStoragePostgres,
   // pathToAmphoraSitemaps,
@@ -19,7 +19,7 @@ const argumentss: Argument[] = [];
 export class Command extends SuperCommand {
   description: string = 'Bumps postgres versions';
   alias: string = 'bump-postgres';
-  regex: RegExp = new RegExp(/alpha\.m\d/g);
+  regex: RegExp = new RegExp(/alpha\.m\d\d\d/g);
   public async execute(vital?: boolean, input?: any) {
     await super.executeWithInput(argumentss, options, input, vital, async () => {
       const amphoraJsonPath = `${pathToAmphoraStoragePostgres}/package.json`;
@@ -31,19 +31,26 @@ export class Command extends SuperCommand {
       const nextVersion = `alpha.m${nextNumber}`
       console.log(`Next Version: ${nextVersion}`);
 
-      for (const path of [pathToAmphoraStoragePostgres]) {
+      for (const path of [pathToAmphoraStoragePostgres, pathToAmphora]) {
+        console.log(`Bumping versions for ${path} ...`);
         await this.bump(path, nextVersion);
+        console.log(`Bumping versions DONE`);
       }
+      console.log(`Bumping Clay versions...`);
       await this.bump(pathToClay, nextVersion);
+      console.log(`Bumping Clay versions DONE`);
 
-      for (const path of [pathToAmphoraStoragePostgres]) {
+      for (const path of [pathToAmphoraStoragePostgres, pathToAmphora]) {
+        console.log(`Publishing ${path} ...`);
         await this.publish(path);
+        console.log(`Publishing DONE`);
       }
     });
   }
 
   private async bump(path, nextVersion) {
     const jsonPath = `${path}/package.json`;
+    console.log(`Bumping versions in ${jsonPath}`);
     let packageJson = fs.readFileSync(jsonPath).toString('UTF-8');
     packageJson = packageJson.replace(this.regex, nextVersion);
     fs.writeFileSync(jsonPath, packageJson)
