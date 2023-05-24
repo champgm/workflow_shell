@@ -26,7 +26,7 @@ export class Command extends SuperCommand {
       for (const importPromise of importPromises) {
         try {
           await importPromise;
-        } catch (error) {
+        }  catch (error: any) {
           console.log(`An error ocurred: ${error}`);
         }
       }
@@ -51,7 +51,7 @@ export class Command extends SuperCommand {
     return new Promise((resolve, reject) => {
       child.on('close', (code) => {
         if (code === 0) {
-          resolve();
+          resolve(undefined);
         } else {
           reject(`Failure: ${code}`);
         }

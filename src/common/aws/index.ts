@@ -132,7 +132,7 @@ export async function createStringParameter(
       } else {
         console.log(`Parameter with name, '${name}' already exists.`);
       }
-    } catch (error) {
+    }  catch (error: any) {
       if (error.code === 'ParameterNotFound') {
         console.log(`Creating string parameter with name, '${name}'...`);
         await ssm.putParameter(putParameters).promise();
@@ -146,7 +146,7 @@ export async function createStringParameter(
 export async function getParameter(ssm: AWS.SSM, name: string) {
   try {
     return (await ssm.getParameter({ Name: name }).promise()).Parameter.Value;
-  } catch (error) {
+  }  catch (error: any) {
     console.error(`Could not retrieve parameter with name: ${name}`);
     throw error;
   }
@@ -157,7 +157,7 @@ export async function getSecretString(name: string, ssm: AWS.SecretsManager): Pr
   try {
     const response = await ssm.getSecretValue(getSecret).promise();
     return response.SecretString;
-  } catch (error) {
+  }  catch (error: any) {
     console.log(`Unexpected error while retrieving secret: ${JSON.stringify(error, null, 2)}`);
     throw error;
   }

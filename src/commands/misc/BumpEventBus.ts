@@ -5,7 +5,7 @@ import { Argument } from '../../common/interface/Argument';
 import { Names } from '../../common/interface/Names';
 import { Option } from '../../common/interface/Option';
 
-import { pathToEventBus, pathToClay, pathToSearch } from '../../common/Configuration'
+import { pathToEventBus, pathToClay, pathToSearch } from '../../Configuration.json';
 
 const options: Option[] = [];
 const argumentss: Argument[] = [];

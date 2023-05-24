@@ -28,7 +28,7 @@ export abstract class SuperCommand {
     try {
       await this.prepareExecution(options, argumentss, input);
       await functionToExecute(input);
-    } catch (error) {
+    }  catch (error: any) {
       console.log(`An error ocurred: ${error}`);
       if (vital) process.exit(1);
     }
@@ -127,7 +127,7 @@ export abstract class SuperCommand {
         ...parsedArguments,
         ...parsedOptions,
       };
-    } catch (error) {
+    }  catch (error: any) {
       console.log(`ERROR: ${error}`);
       return {};
     }

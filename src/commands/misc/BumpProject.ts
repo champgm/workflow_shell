@@ -11,7 +11,8 @@ import {
   pathToEventBus,
   pathToAmphoraStoragePostgres,
   pathToSearch,
-} from '../../common/Configuration';
+  pathToAmphoraSitemaps,
+} from '../../Configuration.json';
 
 const options: Option[] = [];
 const argumentss: Argument[] = [];
@@ -34,8 +35,9 @@ export class Command extends SuperCommand {
       for (const path of [
         pathToAmphoraStoragePostgres,
         pathToAmphora,
-        pathToEventBus,
-        pathToSearch,
+        // pathToEventBus,
+        // pathToSearch,
+        pathToAmphoraSitemaps,
       ]) {
         console.log(`Bumping versions for ${path} ...`);
         await this.bump(path, nextVersion);
@@ -48,8 +50,9 @@ export class Command extends SuperCommand {
       for (const path of [
         pathToAmphoraStoragePostgres,
         pathToAmphora,
-        pathToEventBus,
-        pathToSearch,
+        // pathToEventBus,
+        // pathToSearch,
+        pathToAmphoraSitemaps,
       ]) {
         console.log(`Publishing ${path} ...`);
         await this.publish(path);

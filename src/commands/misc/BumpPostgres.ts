@@ -10,8 +10,8 @@ import {
   pathToAmphora,
   // pathToAmphoraAuth,
   pathToAmphoraStoragePostgres,
-  // pathToAmphoraSitemaps,
-} from '../../common/Configuration';
+  pathToAmphoraSitemaps,
+} from '../../Configuration.json';
 
 const options: Option[] = [];
 const argumentss: Argument[] = [];
@@ -31,7 +31,11 @@ export class Command extends SuperCommand {
       const nextVersion = `alpha.m${nextNumber}`
       console.log(`Next Version: ${nextVersion}`);
 
-      for (const path of [pathToAmphoraStoragePostgres, pathToAmphora]) {
+      for (const path of [
+        pathToAmphoraStoragePostgres,
+        pathToAmphora,
+        pathToAmphoraSitemaps
+      ]) {
         console.log(`Bumping versions for ${path} ...`);
         await this.bump(path, nextVersion);
         console.log(`Bumping versions DONE`);
@@ -40,7 +44,11 @@ export class Command extends SuperCommand {
       await this.bump(pathToClay, nextVersion);
       console.log(`Bumping Clay versions DONE`);
 
-      for (const path of [pathToAmphoraStoragePostgres, pathToAmphora]) {
+      for (const path of [
+        pathToAmphoraStoragePostgres,
+        pathToAmphora,
+        pathToAmphoraSitemaps
+      ]) {
         console.log(`Publishing ${path} ...`);
         await this.publish(path);
         console.log(`Publishing DONE`);

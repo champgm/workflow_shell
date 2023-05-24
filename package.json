@@ -3,9 +3,6 @@
   "version": "2.0.0",
   "description": "Workflow Shell is a collection of bash scripts that aims to abstract away some of the more tedious and repetitive aspects of your daily workflow. Including, but not limited to:",
   "main": "wsh",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/@champgm"
-  },
   "bin": {
     "wsh": "./tsc-out/wsh.js"
   },

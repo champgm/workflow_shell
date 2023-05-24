@@ -8,7 +8,7 @@ import { Option } from '../../common/interface/Option';
 import {
   pathToClay,
   pathToSearch,
-} from '../../common/Configuration';
+} from '../../Configuration.json';
 
 const options: Option[] = [];
 const argumentss: Argument[] = [];

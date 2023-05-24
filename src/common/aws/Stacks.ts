@@ -22,7 +22,7 @@ export async function deleteNetworkInterfaces(stackTraversal: StackTraversal) {
         }).promise();
       });
       detached.push(networkInterface);
-    } catch (error) {
+    } catch (error: any) {
       if (
         error.message.indexOf('cannot be detached') > -1 ||
         error.message.indexOf('does not exist') > -1 ||
@@ -56,7 +56,7 @@ export async function deleteNetworkInterfaces(stackTraversal: StackTraversal) {
           NetworkInterfaceId: networkInterface.NetworkInterfaceId,
         }).promise();
       });
-    } catch (error) {
+    }  catch (error: any) {
       if (error.message.indexOf('is currently in use') > -1 ||
         error.message.indexOf('does not exist') > -1) {
         // That's fine
@@ -110,7 +110,7 @@ export async function deleteSecurityGroups(stackTraversal: StackTraversal) {
         console.log(`Deleting security group, '${securityGroup.GroupId}'...`);
         await stackTraversal.ec2.deleteSecurityGroup({ GroupId: securityGroup.GroupId }).promise();
       });
-    } catch (error) {
+    }  catch (error: any) {
       if (error.message.indexOf('has a dependent object') > -1 ||
         error.message.indexOf('does not exist') > -1) {
         // That's fine
@@ -131,7 +131,7 @@ export async function deleteStacks(stackTraversal: StackTraversal) {
         console.log(`Deleting stack, '${stackSummary.StackId}'...`);
         await stackTraversal.cloudformation.deleteStack({ StackName: stackSummary.StackId }).promise();
       });
-    } catch (error) {
+    }  catch (error: any) {
       throw error;
     }
   }
@@ -146,7 +146,7 @@ export async function deleteNatGateways(stackTraversal: StackTraversal) {
       console.log(`Deleting NAT gateway, '${natGateway.NatGatewayId}'...`);
       try {
         await stackTraversal.ec2.deleteNatGateway({ NatGatewayId: natGateway.NatGatewayId }).promise();
-      } catch (error) {
+      }  catch (error: any) {
         if (error.message.indexOf('was not found') > -1) {
           // That's fine
         } else {
@@ -168,7 +168,7 @@ export async function deleteElasticContainerRegistries(stackTraversal: StackTrav
         if (elasticContainerRegistry.imageIds && elasticContainerRegistry.imageIds.length > 0) {
           await stackTraversal.ecr.batchDeleteImage(elasticContainerRegistry).promise();
         }
-      } catch (error) {
+      }  catch (error: any) {
         if (error.message.indexOf('was not found') > -1) {
           // That's fine
         } else {
@@ -210,7 +210,7 @@ export async function deleteS3Bucket(stackTraversal: StackTraversal) {
           }).promise();
         }
         await stackTraversal.s3.deleteBucket({ Bucket: s3Bucket.PhysicalResourceId }).promise();
-      } catch (error) {
+      }  catch (error: any) {
         if (error.message.indexOf('does not exist') > -1) {
           // That's fine
         } else {
@@ -230,7 +230,7 @@ export async function deleteElasticsearchDomains(stackTraversal: StackTraversal)
       console.log(`Deleting Elasticsearch domain, '${domainName}'...`);
       try {
         await stackTraversal.es.deleteElasticsearchDomain({ DomainName: domainName }).promise();
-      } catch (error) {
+      }  catch (error: any) {
         if (error.message.indexOf('was not found') > -1) {
           // That's fine
         } else {
@@ -247,7 +247,7 @@ export async function awaitDeletion(stackName: string, cloudFormation: AWS.Cloud
   try {
     const response = await cloudFormation.waitFor('stackDeleteComplete', parameters).promise();
     console.log(`Response: ${JSON.stringify(response, null, 2)}`);
-  } catch (error) {
+  }  catch (error: any) {
     if (error.message.indexOf('Resource is not in the state stackDeleteComplete') > -1) {
       console.log(`Stack still not deleted after two minutes, trying again.`);
       await awaitDeletion(stackName, cloudFormation);
