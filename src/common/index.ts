@@ -12,7 +12,7 @@ export async function sleep(milliseconds?: number) {
 export async function exponentialBackOff<T>(action: () => T, timesRetried: number = 0): Promise<T> {
   try {
     return await action();
-  }  catch (error: any) {
+  }  catch (error) {
     if (error.message.indexOf('Rate exceeded') > -1) {
       console.log(`Exponential Backoff Error: ${error.message}`);
 
@@ -35,7 +35,7 @@ export function execute(command: SuperCommand) {
       await command.prepareExecution();
       process.exit();
     })();
-  }  catch (error: any) {
+  }  catch (error) {
     console.error(error);
     process.exit(1);
   }

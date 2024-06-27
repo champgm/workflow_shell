@@ -8,9 +8,9 @@ import { Option } from '../../common/interface/Option';
 import {
   pathToClay,
   pathToAmphora,
-  pathToEventBus,
+  // pathToEventBus,
   pathToAmphoraStoragePostgres,
-  pathToSearch,
+  // pathToSearch,
   pathToAmphoraSitemaps,
 } from '../../Configuration.json';
 
@@ -70,6 +70,6 @@ export class Command extends SuperCommand {
   }
 
   private async publish(path) {
-    await executeCommand('npm', ['publish'], { cwd: path });
+    await executeCommand('npm', ['run','release'], { cwd: path });
   }
 }

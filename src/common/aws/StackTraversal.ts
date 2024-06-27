@@ -106,7 +106,7 @@ export class StackTraversal {
         await exponentialBackOff(async () => {
           await this.traverseStackResourceSummary(resourceSummary);
         });
-      }  catch (error: any) {
+      }  catch (error) {
         if (error.message.indexOf('does not exist') > -1) {
           // That's fine
         } else {
@@ -137,7 +137,7 @@ export class StackTraversal {
           this.networkInterfaces = this.networkInterfaces.concat(networkInterfaces);
         });
       }
-    }  catch (error: any) {
+    }  catch (error) {
       if (error.message.indexOf('does not exist') > -1) {
         // That's fine
       } else {

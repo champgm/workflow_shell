@@ -7,7 +7,7 @@ import { Option } from '../../common/interface/Option';
 
 import {
   pathToClay,
-  pathToAmphora,
+  // pathToAmphora,
   // pathToAmphoraAuth,
   pathToAmphoraStoragePostgres,
   pathToAmphoraSitemaps,
@@ -33,7 +33,7 @@ export class Command extends SuperCommand {
 
       for (const path of [
         pathToAmphoraStoragePostgres,
-        pathToAmphora,
+        // pathToAmphora,
         pathToAmphoraSitemaps
       ]) {
         console.log(`Bumping versions for ${path} ...`);
@@ -46,7 +46,7 @@ export class Command extends SuperCommand {
 
       for (const path of [
         pathToAmphoraStoragePostgres,
-        pathToAmphora,
+        // pathToAmphora,
         pathToAmphoraSitemaps
       ]) {
         console.log(`Publishing ${path} ...`);
@@ -65,6 +65,6 @@ export class Command extends SuperCommand {
   }
 
   private async publish(path) {
-    await executeCommand('npm', ['publish'], { cwd: path });
+    await executeCommand('npm', ['run','release'], { cwd: path });
   }
 }

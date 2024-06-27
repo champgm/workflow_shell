@@ -16,7 +16,7 @@ const commandPromises = commandPaths.map(async (path) => {
       try {
         await command.execute(true);
         process.exit();
-      }  catch (error: any) {
+      }  catch (error) {
         // console.error(`An error occurred:`);
         // console.error(JSON.stringify(revealAllProperties(error), null, 2));
         process.exit(1);
@@ -26,7 +26,7 @@ const commandPromises = commandPaths.map(async (path) => {
       foundCommands[command.alias] = command;
       return command;
     }
-  }  catch (error: any) {
+  }  catch (error) {
     console.error(`Problem occurred while trying to instantiate Command in file, '${path}'`);
     console.log(`${inspect(error, true)}`);
     process.exit(1);

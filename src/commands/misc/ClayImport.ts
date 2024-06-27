@@ -26,7 +26,7 @@ export class Command extends SuperCommand {
       for (const importPromise of importPromises) {
         try {
           await importPromise;
-        }  catch (error: any) {
+        }  catch (error) {
           console.log(`An error ocurred: ${error}`);
         }
       }

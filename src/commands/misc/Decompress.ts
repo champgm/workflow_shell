@@ -28,7 +28,7 @@ export class Command extends SuperCommand {
             password: this.input[Names.PASSWORD],
           };
           await ((Zip as any).extractFull(filePath, targetPath, zipOptions));
-        }  catch (error: any) {
+        }  catch (error) {
           console.log(`An error ocurred while extracting '${filePath}': ${error}`);
         }
       }));
@@ -52,7 +52,7 @@ export class Command extends SuperCommand {
         } else if (extensions.includes(path.extname(newBasePath))) {
           newResults.push(newBasePath);
         }
-      }  catch (error: any) {
+      }  catch (error) {
         console.log(`An error ocurred reading '${newBasePath}': ${error}`);
       }
     });
