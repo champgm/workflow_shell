@@ -16,3 +16,4 @@ tsc-out/
 # Work stuff
 src/commands/work/*
 src/common/Configuration.ts
+Configuration.json
