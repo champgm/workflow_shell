@@ -48,7 +48,7 @@ export class Command extends SuperCommand {
       console.log(`Child ${index} exited with code:` + exitCode);
     });
 
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       child.on('close', (code) => {
         if (code === 0) {
           resolve(undefined);

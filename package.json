@@ -10,7 +10,7 @@
     "lint": "tslint src/**/*.ts --fix --project tsconfig.json",
     "tslint": "tslint --config tslint.json --exclude 'node_modules/**' '**/*.ts' --fix",
     "clean": "mkdir -p empty_dir && rsync -a --delete empty_dir/ tsc-out/ && rsync -a --delete empty_dir/ coverage/",
-    "build": "npm run clean && tsc && chmod +x tsc-out/wsh.js",
+    "build": "tsc && chmod +x tsc-out/wsh.js",
     "watch": "npm run clean && tsc -w",
     "update": "npm update && npm outdated",
     "go": "wsh hello"
